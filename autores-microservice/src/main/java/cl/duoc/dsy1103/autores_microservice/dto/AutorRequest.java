@@ -26,6 +26,7 @@ public class AutorRequest {
     private String biografia;
 
     @NotBlank(message = "La nacionalidad es obligatoria.")
+    @Size(max = 50, message = "La nacionalidad debe tener como máximo 50 caracteres.")
     private String nacionalidad;
 
     @NotNull(message = "La fecha de nacimiento es obligatoria.")
