@@ -1,5 +1,6 @@
 package cl.duoc.dsy1103.usuarios_microservice.service;
 
+import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioRequest;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioResponse;
 import cl.duoc.dsy1103.usuarios_microservice.mapper.UsuarioMapper;
 import cl.duoc.dsy1103.usuarios_microservice.model.Usuario;
@@ -38,6 +39,36 @@ public class UsuarioService {
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         return usuarioMapper.toResponse(usuario);
     }
+    public UsuarioResponse crearUsario(UsuarioRequest usuarioRequest){
+        log.info("creando nuevo usuario");
+        Usuario usuario = usuarioRepository.save(usuarioMapper.fromRequest(usuarioRequest));
+        return usuarioMapper.toResponse(usuario);
+    }
+
+    public UsuarioResponse modificarUsuario(Long id,UsuarioRequest usuarioRequest){
+        log.info("modificando usuario id: {}", id);
+        Usuario usuarioAModificar = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("usuario no encontrado :" + id));
+
+        usuarioAModificar.setNombreCompleto(usuarioRequest.getNombreCompleto());
+        usuarioAModificar.setEmail(usuarioRequest.getEmail());
+        usuarioAModificar.setTelefono(usuarioRequest.getTelefono());
+
+        Usuario usuarioModificado = usuarioRepository.save(usuarioAModificar);
+        return usuarioMapper.toResponse(usuarioModificado);
+    }
+
+    public void eliminarUsuario(Long id, UsuarioRequest usuarioRequest){
+        log.info("Eliminando usuario id: {}", id);
+        if(!usuarioRepository.existsById(id)){
+            throw new NoSuchElementException("Usuario no encontrado " + id);
+        }
+        usuarioRepository.deleteById(id);
+    }
+
+
+
+
 
 
 }
