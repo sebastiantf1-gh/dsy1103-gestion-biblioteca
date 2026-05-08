@@ -58,7 +58,7 @@ public class UsuarioService {
         return usuarioMapper.toResponse(usuarioModificado);
     }
 
-    public void eliminarUsuario(Long id, UsuarioRequest usuarioRequest){
+    public void eliminarUsuario(Long id){
         log.info("Eliminando usuario id: {}", id);
         if(!usuarioRepository.existsById(id)){
             throw new NoSuchElementException("Usuario no encontrado " + id);
