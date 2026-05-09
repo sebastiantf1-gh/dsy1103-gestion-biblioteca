@@ -22,12 +22,12 @@ public class GlobalHandlerException {
     public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex,
             HttpServletRequest request) {
-        log.error("Data integrity violation: {}", ex.getMessage());
+        log.error("Violacion de integridad de datos: {}", ex.getMessage());
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
                 .error(HttpStatus.CONFLICT.name())
-                .message("Data integrity violation")
+                .message("violacion de integridad de datos")
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
@@ -37,7 +37,7 @@ public class GlobalHandlerException {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNoSuchElementException(NoSuchElementException ex,
                                                                          HttpServletRequest request) {
-        log.error("Entity not found: {}", ex.getMessage());
+        log.error("Registro no encontrado: {}", ex.getMessage());
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -52,7 +52,7 @@ public class GlobalHandlerException {
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
-        log.error("Invalid request: {}", ex.getMessage());
+        log.error("Error de validacion: {}", ex.getMessage());
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .toList();
@@ -60,7 +60,7 @@ public class GlobalHandlerException {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.name())
-                .message("Invalid request")
+                .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .errors(errors)
                 .build();
@@ -70,12 +70,12 @@ public class GlobalHandlerException {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex,
                                                                    HttpServletRequest request) {
-        log.error("Unexpected error: {}", ex.getMessage());
+        log.error("Error interno del servidor: {}", ex.getMessage());
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.name())
-                .message("Unexpected error")
+                .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
