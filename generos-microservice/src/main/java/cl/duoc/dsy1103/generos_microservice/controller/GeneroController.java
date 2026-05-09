@@ -41,18 +41,21 @@ public class GeneroController {
         log.info("Get /usuarios");
         return ResponseEntity.ok(generoService.listarGeneros());
     }
+
     @GetMapping
     public ResponseEntity<GeneroResponse> buscarGeneroPorId(@PathVariable Long id){
         log.info("Get /generos/{}", id);
         return ResponseEntity.ok(generoService.buscarGeneroPorId(id));
 
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<GeneroResponse> modificarGenero(@PathVariable Long id, @Valid @RequestBody GeneroRequest generoRequest){
         log.info("Put /usuarios/{}", id);
         return ResponseEntity.ok(generoService.modificarGenero(id, generoRequest));
 
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarGenero(@PathVariable Long id){
         log.info("Delete /generos/{}", id);
