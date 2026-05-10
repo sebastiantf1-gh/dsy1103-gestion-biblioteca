@@ -3,6 +3,7 @@ package cl.duoc.dsy1103.resennas_microservice.service;
 
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaRequest;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaResponse;
+import cl.duoc.dsy1103.resennas_microservice.exception.ConflictException;
 import cl.duoc.dsy1103.resennas_microservice.mapper.ResennaMapper;
 import cl.duoc.dsy1103.resennas_microservice.model.Resenna;
 import cl.duoc.dsy1103.resennas_microservice.repository.ResennaRepository;
@@ -28,6 +29,11 @@ public class ResennaService {
 
     public ResennaResponse crearResenna(ResennaRequest resennaRequest){
         log.info("creando resenna");
+        if(resennaRepository.existByIdUsuarioAndIdLibro(
+                resennaRequest.getIdUsuario(),
+                resennaRequest.getIdLibro())){
+                    throw new ConflictException("El usuario ya hizo una reseña para este libro");
+        }
         Resenna resenna = resennaMapper.fromRequest(resennaRequest);
         resenna.setFechaRegistro(LocalDateTime.now());
         Resenna resennaAGuardar = resennaRepository.save(resenna);
