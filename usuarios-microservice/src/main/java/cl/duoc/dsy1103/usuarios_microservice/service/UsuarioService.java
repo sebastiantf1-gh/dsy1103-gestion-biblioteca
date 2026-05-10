@@ -39,7 +39,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         return usuarioMapper.toResponse(usuario);
     }
-    public UsuarioResponse crearUsario(UsuarioRequest usuarioRequest){
+    public UsuarioResponse crearUsuario(UsuarioRequest usuarioRequest){
         log.info("creando nuevo usuario");
         Usuario usuario = usuarioRepository.save(usuarioMapper.fromRequest(usuarioRequest));
         return usuarioMapper.toResponse(usuario);

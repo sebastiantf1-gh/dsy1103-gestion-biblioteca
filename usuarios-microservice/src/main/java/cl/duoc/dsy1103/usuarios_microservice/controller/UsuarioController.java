@@ -37,9 +37,9 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public  ResponseEntity <UsuarioResponse> crearUsario(@Valid @RequestBody UsuarioRequest usuarioRequest){
+    public  ResponseEntity <UsuarioResponse> crearUsuario(@Valid @RequestBody UsuarioRequest usuarioRequest){
         log.info("Post /usuarios");
-        UsuarioResponse usuarioCreado = usuarioService.crearUsario(usuarioRequest);
+        UsuarioResponse usuarioCreado = usuarioService.crearUsuario(usuarioRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
