@@ -30,7 +30,7 @@ public class GeneroController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(generoAgregado.getIdGenero())
+                .buildAndExpand(generoAgregado.getId())
                 .toUri();
         return ResponseEntity.created(location).body(generoAgregado);
 

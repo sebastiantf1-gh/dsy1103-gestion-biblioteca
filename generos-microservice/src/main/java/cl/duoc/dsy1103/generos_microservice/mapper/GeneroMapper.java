@@ -19,7 +19,7 @@ public class GeneroMapper {
 
     public GeneroResponse toRespone(Genero genero){
         return GeneroResponse.builder()
-                .idGenero(genero.getIdGenero())
+                .id(genero.getId())
                 .nombreGenero(genero.getNombreGenero())
                 .descripcion(genero.getDescripcion())
                 .build();
