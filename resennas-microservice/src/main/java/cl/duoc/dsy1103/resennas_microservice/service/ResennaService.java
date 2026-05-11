@@ -29,7 +29,7 @@ public class ResennaService {
 
     public ResennaResponse crearResenna(ResennaRequest resennaRequest){
         log.info("creando resenna");
-        if(resennaRepository.existByIdUsuarioAndIdLibro(
+        if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){
                     throw new ConflictException("El usuario ya hizo una reseña para este libro");

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResennaRepository extends JpaRepository<Resenna, Long> {
 
-    boolean existByIdUsuarioAndIdLibro(Long idUsuario, Long idLibro);
+    boolean existsByIdUsuarioAndIdLibro(Long idUsuario, Long idLibro);
 }
