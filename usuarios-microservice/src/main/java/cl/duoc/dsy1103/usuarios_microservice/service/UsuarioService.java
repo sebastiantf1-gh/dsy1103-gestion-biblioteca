@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,8 +42,10 @@ public class UsuarioService {
     }
     public UsuarioResponse crearUsuario(UsuarioRequest usuarioRequest){
         log.info("creando nuevo usuario");
-        Usuario usuario = usuarioRepository.save(usuarioMapper.fromRequest(usuarioRequest));
-        return usuarioMapper.toResponse(usuario);
+        Usuario usuario = usuarioMapper.fromRequest(usuarioRequest);
+        usuario.setFechaRegistro(LocalDateTime.now());
+        Usuario usuario1 = usuarioRepository.save(usuario);
+        return usuarioMapper.toResponse(usuario1);
     }
 
     public UsuarioResponse modificarUsuario(Long id,UsuarioRequest usuarioRequest){

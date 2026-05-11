@@ -13,7 +13,6 @@ public class UsuarioMapper {
                 .nombreCompleto(request.getNombreCompleto())
                 .email(request.getEmail())
                 .telefono(request.getTelefono())
-                .fechaRegistro(request.getFechaRegistro())
                 .build();
     }
 
