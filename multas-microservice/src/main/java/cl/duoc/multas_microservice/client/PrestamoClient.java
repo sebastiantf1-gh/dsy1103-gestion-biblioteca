@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 @Component
 @Slf4j
-public class PrestamosClient {
+public class PrestamoClient {
     @Autowired
     private WebClient webClientPrestamos; // Asegúrate de tener este bean configurado
 
