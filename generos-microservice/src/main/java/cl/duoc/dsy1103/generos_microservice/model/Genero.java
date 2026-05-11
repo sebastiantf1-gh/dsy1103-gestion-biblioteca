@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Genero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idGenero;
+    private Long id;
 
     @Column(name = "nombre_genero",unique = true, nullable = false)
     private String nombreGenero;

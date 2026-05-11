@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GeneroResponse {
-    private Long idGenero;
+    private Long id;
     private String nombreGenero;
     private String descripcion;
 }
