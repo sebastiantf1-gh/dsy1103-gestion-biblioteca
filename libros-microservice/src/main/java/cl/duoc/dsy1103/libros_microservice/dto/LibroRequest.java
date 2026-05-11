@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 @Builder
 public class LibroRequest {
     @NotBlank(message = "El ISBN es obligatorio.")
-    @Size(max = 100, message = "El titulo debe tener como maximo 100 caracteres.")
+    @Size(max = 20, message = "El ISBN debe tener como maximo 20 caracteres.")
     private String isbn;
 
     @NotBlank(message = "El titulo es obligatorio.")
+    @Size(max = 100, message = "El titulo debe tener como maximo 100 caracteres.")
     private String titulo;
 
     private String sinopsis;

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "libro")
+@Table(name = "libros")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,7 +22,7 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, length = 20, nullable = false)
     private String isbn;
 
     @Column(nullable = false, length = 100)

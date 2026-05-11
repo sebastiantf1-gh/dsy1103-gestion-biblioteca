@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class) //"escuchar" eventos de auditoria (@CreatedDate)
-@Table(name = "autor")
+@Table(name = "autores")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

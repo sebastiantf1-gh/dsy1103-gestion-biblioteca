@@ -1,4 +1,4 @@
-INSERT INTO autor (nombre_completo, biografia, nacionalidad, fecha_nacimiento) VALUES
+INSERT INTO autores (nombre_completo, biografia, nacionalidad, fecha_nacimiento) VALUES
        ('Gabriel García Márquez', 'Escritor colombiano, premio Nobel de Literatura en 1982 y autor de Cien años de soledad.', 'Colombiana', '1927-03-06'),
        ('Isabel Allende', 'Escritora chilena, autora de superventas como La casa de los espíritus.', 'Chilena', '1942-08-02'),
        ('Jorge Luis Borges', 'Destacado escritor argentino de cuentos, ensayos y poemas, clave en la literatura del siglo XX.', 'Argentina', '1899-08-24'),
