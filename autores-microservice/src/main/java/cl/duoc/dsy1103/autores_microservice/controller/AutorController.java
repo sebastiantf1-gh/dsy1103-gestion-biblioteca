@@ -39,7 +39,7 @@ public class AutorController {
     //Crear autor
     @PostMapping
     public ResponseEntity<AutorResponse> crearAutor(@Valid @RequestBody AutorRequest autor){//@Valid para validar anotaciones del dto
-        log.info("Post /autores");
+        log.info("POST /autores");
         AutorResponse crearAutor = autorService.crearAutor(autor);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -63,7 +63,5 @@ public class AutorController {
         autorService.eliminarAutor(id);
         return ResponseEntity.noContent().build(); // no body, con .build() se cierra configuracion y se envía vacío.
     }
-
-
 
 }
