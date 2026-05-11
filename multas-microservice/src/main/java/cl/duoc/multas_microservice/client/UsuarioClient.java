@@ -1,7 +1,10 @@
 package cl.duoc.multas_microservice.client;
 
+import cl.duoc.multas_microservice.exception.ForbiddenException;
+import cl.duoc.multas_microservice.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -19,6 +22,8 @@ public class UsuarioClient {
      * Obtiene la info de un usuario por medio de su id
      * Se realiza una llamada http GET al servicio de usuario para obtener sus datos.
      */
+    @Value("${services.usuarios.baseUrl}")
+    private String baseUrl;
 
     public UsuarioResponse obtenerUsuarioPorId(Long id, String token){
         log.info("Obteniendo información del paciente con ID: {}", id);

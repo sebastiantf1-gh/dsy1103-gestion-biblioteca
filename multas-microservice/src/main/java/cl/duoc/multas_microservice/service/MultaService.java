@@ -32,15 +32,15 @@ public class MultaService {
 
     public MultaResponse crearMulta(MultaRequest multaRequest, String token) {
         log.info("Creando nueva multa para el Usuario ID: {} asociado al Préstamo ID: {}",
-                multaRequest.getUsuarioId(), multaRequest.getPrestamoId());
+                multaRequest.getIdUsuario(), multaRequest.getIdPrestamo());
         //Validar existencia del usuario en el microservicio de usuarios
-        UsuarioResponse usuarioResponse = usuarioClient.obtenerUsuarioPorId(multaRequest.getUsuarioId(), token);
+        UsuarioResponse usuarioResponse = usuarioClient.obtenerUsuarioPorId(multaRequest.getIdUsuario(), token);
 
         //Validar existencia del préstamo en el microservicio de préstamos
-        PrestamoResponse prestamoResponse = prestamoClient.obtenerPrestamoPorId(multaRequest.getPrestamoId(), token);
+        PrestamoResponse prestamoResponse = prestamoClient.obtenerPrestamoPorId(multaRequest.getIdPrestamo(), token);
 
         //Mapear el request a la entidad Multa
-        Multa multa = multaMapper.fromRequest(multaRequest);
+        Multa multa = multaMapper.toEntity(multaRequest);
 
 
         //Guardar la multa en la base de datos
@@ -62,7 +62,7 @@ public class MultaService {
     //Listar multas asociadas a un usuario
     public List<MultaResponse> obtenerMultasPorUsuarioId(Long usuarioId) {
         log.info("Buscando multas para el Usuario ID: {}", usuarioId);
-        List<Multa> multas = multaRepository.findAllByUsuarioId(usuarioId);
+        List<Multa> multas = multaRepository.findByIdUsuario(usuarioId);
         return multas.stream()
                 .map(multaMapper::toResponse)
                 .toList();
