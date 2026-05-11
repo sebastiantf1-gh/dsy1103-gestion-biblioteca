@@ -1,6 +1,6 @@
-package cl.duoc.dsy1103.autores_microservice.exception;
+package cl.duoc.dsy1103.libros_microservice.exception;
 
-import cl.duoc.dsy1103.autores_microservice.dto.ApiErrorResponse;
+import cl.duoc.dsy1103.libros_microservice.dto.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,9 +15,7 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
-
-    //Violacion de integridad de datos
+public class GlobalHandlerException {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex,
@@ -32,8 +30,6 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
-
-    //Registro no encontrado
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNoSuchElementException(
             NoSuchElementException ex,
@@ -48,8 +44,6 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
-
-    //Error de validacion
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex,
@@ -64,8 +58,6 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-
-    //Error interno del servidor
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntimeException(
             RuntimeException ex,
@@ -81,51 +73,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
-    //Acceso prohibido
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ApiErrorResponse> handleForbiddenException(
-            ForbiddenException ex,
-            HttpServletRequest request){
-        log.error("Acceso prohibido: {}", ex.getMessage());
-        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.FORBIDDEN.value())
-                .error(HttpStatus.FORBIDDEN.name())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
-    }
-
-    //No autorizado
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiErrorResponse>handleUnauthorizedException(
-            UnauthorizedException ex,
-            HttpServletRequest request){
-        log.error("No autorizado: {}", ex.getMessage());
-        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error(HttpStatus.UNAUTHORIZED.name())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
-
-    //Conflicto por existencia
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiErrorResponse> handleConflictException(
-            ConflictException ex,
-            HttpServletRequest request){
-        log.error("Autor ya existe: {} ", ex.getMessage());
-        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .error(HttpStatus.CONFLICT.name())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-    }
 }
