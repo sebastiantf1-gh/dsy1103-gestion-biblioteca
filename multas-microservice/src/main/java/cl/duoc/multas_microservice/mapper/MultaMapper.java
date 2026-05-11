@@ -30,7 +30,6 @@ public class MultaMapper {
 
     //Covierte la entidad a respuesta de servidor
     public MultaResponse toResponse(Multa multa){
-        if (multa == null) return null;
 
         return MultaResponse.builder()
                 .id(multa.getId())
