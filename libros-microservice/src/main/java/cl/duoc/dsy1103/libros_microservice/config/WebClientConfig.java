@@ -8,7 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
     @Value("${services.autores.url}")
-    private  String autoresServiceUrl;
+    private String autoresServiceUrl;
+
+    @Value("${services.categorias.url}")
+    private String categoriasServiceUrl;
 
     @Bean
     public WebClient autoresWebClient(){
@@ -18,6 +21,16 @@ public class WebClientConfig {
                 .defaultHeader("Accept", "application/json")
                 .build();
     }
+
+    @Bean
+    public WebClient categoriasWebClient(){
+        return WebClient.builder()
+                .baseUrl(categoriasServiceUrl)
+                .defaultHeader("Content-Type", "application/json")
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+    }
+
 
 
 }

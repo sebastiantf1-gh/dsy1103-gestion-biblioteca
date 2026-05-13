@@ -1,6 +1,7 @@
 package cl.duoc.dsy1103.libros_microservice.mapper;
 
 import cl.duoc.dsy1103.libros_microservice.dto.AutorResponse;
+import cl.duoc.dsy1103.libros_microservice.dto.CategoriaResponse;
 import cl.duoc.dsy1103.libros_microservice.dto.LibroRequest;
 import cl.duoc.dsy1103.libros_microservice.dto.LibroResponse;
 import cl.duoc.dsy1103.libros_microservice.model.Libro;
@@ -20,7 +21,7 @@ public class LibroMapper {
                 .idGenero(request.getIdGenero())
                 .build();
     }
-    public LibroResponse toResponse(Libro libro, AutorResponse autor){
+    public LibroResponse toResponse(Libro libro, AutorResponse autor, CategoriaResponse categoria){
         return LibroResponse.builder()
                 .id(libro.getId())
                 .isbn(libro.getIsbn())
@@ -30,7 +31,7 @@ public class LibroMapper {
                 .disponible(libro.getDisponible())
                 .fechaRegistro(libro.getFechaRegistro())
                 .autor(autor)
-                .idCategoria(libro.getIdCategoria())
+                .categoria(categoria)
                 .idGenero(libro.getIdGenero())
                 .build();
     }

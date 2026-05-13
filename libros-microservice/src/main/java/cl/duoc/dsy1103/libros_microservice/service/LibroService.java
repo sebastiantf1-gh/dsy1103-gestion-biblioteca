@@ -1,10 +1,8 @@
 package cl.duoc.dsy1103.libros_microservice.service;
 
 import cl.duoc.dsy1103.libros_microservice.client.AutorClient;
-import cl.duoc.dsy1103.libros_microservice.dto.AutorResponse;
-import cl.duoc.dsy1103.libros_microservice.dto.LibroRequest;
-import cl.duoc.dsy1103.libros_microservice.dto.LibroResponse;
-import cl.duoc.dsy1103.libros_microservice.dto.LibroUpdateRequest;
+import cl.duoc.dsy1103.libros_microservice.client.CategoriaClient;
+import cl.duoc.dsy1103.libros_microservice.dto.*;
 import cl.duoc.dsy1103.libros_microservice.mapper.LibroMapper;
 import cl.duoc.dsy1103.libros_microservice.model.Libro;
 import cl.duoc.dsy1103.libros_microservice.repository.LibroRepository;
@@ -27,13 +25,17 @@ public class LibroService {
     @Autowired
     private AutorClient autorClient;
 
+    @Autowired
+    private CategoriaClient categoriaClient;
+
     //todos los libros
     public List<LibroResponse> buscarLibros(){
         log.info("Obteniendo todos los libros...");
         return libroRepository.findAll().stream()
                 .map(libro -> {
                     AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
-                    return libroMapper.toResponse(libro, autor);
+                    CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+                    return libroMapper.toResponse(libro, autor, categoria);
                 })
                 .toList();
     }
@@ -44,7 +46,8 @@ public class LibroService {
         return libroRepository.findByIdAutor(idAutor).stream()
                 .map(libro -> {
                     AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
-                    return libroMapper.toResponse(libro, autor);
+                    CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+                    return libroMapper.toResponse(libro, autor, categoria);
                 })
                 .toList();
     }
@@ -54,7 +57,8 @@ public class LibroService {
         return libroRepository.findById(id)
                 .map(libro -> {
                 AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
-                return libroMapper.toResponse(libro, autor);
+                CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+                return libroMapper.toResponse(libro, autor, categoria);
                 })
                 .orElseThrow(()-> new NoSuchElementException("No se encontro libro con ID: " + id));
 
@@ -66,11 +70,13 @@ public class LibroService {
         Libro libro = libroMapper.toEntity(libroRequest);
 
         AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
-        if (autor == null){
-            log.warn("Autor con ID: {} no encontrado.", libro.getIdAutor());
-            throw new NoSuchElementException("No se encontro autor con ID: " + libro.getIdAutor());
+        CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+        if (autor == null || categoria == null){
+            log.warn("Intento de creación de libro fallido. Autor ID: {} o Categoría ID: {} no encontrados.",
+                    libro.getIdAutor(), libro.getIdCategoria());
+            throw new NoSuchElementException("No se pudo crear el libro porque el autor o la categoría especificados no existen.");
         }
-        return libroMapper.toResponse(libroRepository.save(libro), autor);
+        return libroMapper.toResponse(libroRepository.save(libro), autor, categoria);
     }
 
     //actualizar libro
@@ -78,10 +84,18 @@ public class LibroService {
         log.info("Actualizando libro con ID: {}",id);
         Libro libroExistente = libroRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No se encontro libro con ID: "+ id));
-        AutorResponse autor = autorClient.buscarAutorPorId(request.getIdAutor());
-        if (autor == null){
-            log.warn("Autor con ID: {} no encontrado.", request.getIdAutor());
-            throw new NoSuchElementException("No se encontro autor con ID: " + request.getIdAutor());
+
+        //verificar si se usa IDs nuevos o los existentes
+        Long idAutorFinal = (request.getIdAutor() != null) ? request.getIdAutor() : libroExistente.getIdAutor();
+        Long idCatFinal = (request.getIdCategoria() != null) ? request.getIdCategoria() : libroExistente.getIdCategoria();
+
+        AutorResponse autor = autorClient.buscarAutorPorId(idAutorFinal);
+        CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(idCatFinal);
+
+        if (autor == null || categoria == null){
+            log.warn("Intento de actualizacion de libro fallido. Autor ID: {} o Categoría ID: {} no encontrados.",
+                    idAutorFinal, idCatFinal);
+            throw new NoSuchElementException("No se pudo actualizar el libro porque el autor o la categoría especificados no existen.");
         }
         if (request.getTitulo() != null){
             libroExistente.setTitulo(request.getTitulo());
@@ -96,16 +110,16 @@ public class LibroService {
             libroExistente.setDisponible(request.getDisponible());
         }
         if (request.getIdAutor() != null){
-            libroExistente.setIdAutor(request.getIdAutor());
+            libroExistente.setIdAutor(idAutorFinal);
         }
         if (request.getIdCategoria() != null){
-            libroExistente.setIdCategoria(request.getIdCategoria());
+            libroExistente.setIdCategoria(idCatFinal);
         }
         if (request.getIdGenero() != null){
             libroExistente.setIdGenero(request.getIdGenero());
         }
         Libro libroActualizado = libroRepository.save(libroExistente);
-        return libroMapper.toResponse(libroActualizado, autor);
+        return libroMapper.toResponse(libroActualizado, autor, categoria);
     }
 
     //eliminar libro
@@ -128,7 +142,8 @@ public class LibroService {
         libro.setDisponible(false);
         Libro libroActualizado = libroRepository.save(libro);
         AutorResponse autor = autorClient.buscarAutorPorId(libroActualizado.getIdAutor());
-        return libroMapper.toResponse(libroActualizado, autor);
+        CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libroActualizado.getIdCategoria());
+        return libroMapper.toResponse(libroActualizado, autor, categoria);
     }
 
     //marcar libro como disponible - true
@@ -142,7 +157,8 @@ public class LibroService {
         libro.setDisponible(true);
         Libro libroActualizado = libroRepository.save(libro);
         AutorResponse autor = autorClient.buscarAutorPorId(libroActualizado.getIdAutor());
-        return libroMapper.toResponse(libroActualizado, autor);
+        CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libroActualizado.getIdCategoria());
+        return libroMapper.toResponse(libroActualizado, autor, categoria);
 
     }
 

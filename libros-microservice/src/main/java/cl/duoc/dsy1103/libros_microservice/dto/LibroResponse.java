@@ -20,6 +20,6 @@ public class LibroResponse {
     private Boolean disponible;
     private LocalDateTime fechaRegistro;
     private AutorResponse autor;
-    private Long idCategoria;
+    private CategoriaResponse categoria;
     private Long idGenero;
 }
