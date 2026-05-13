@@ -1,9 +1,6 @@
 package cl.duoc.dsy1103.libros_microservice.mapper;
 
-import cl.duoc.dsy1103.libros_microservice.dto.AutorResponse;
-import cl.duoc.dsy1103.libros_microservice.dto.CategoriaResponse;
-import cl.duoc.dsy1103.libros_microservice.dto.LibroRequest;
-import cl.duoc.dsy1103.libros_microservice.dto.LibroResponse;
+import cl.duoc.dsy1103.libros_microservice.dto.*;
 import cl.duoc.dsy1103.libros_microservice.model.Libro;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +18,7 @@ public class LibroMapper {
                 .idGenero(request.getIdGenero())
                 .build();
     }
-    public LibroResponse toResponse(Libro libro, AutorResponse autor, CategoriaResponse categoria){
+    public LibroResponse toResponse(Libro libro, AutorResponse autor, CategoriaResponse categoria, GeneroResponse genero){
         return LibroResponse.builder()
                 .id(libro.getId())
                 .isbn(libro.getIsbn())
@@ -32,7 +29,7 @@ public class LibroMapper {
                 .fechaRegistro(libro.getFechaRegistro())
                 .autor(autor)
                 .categoria(categoria)
-                .idGenero(libro.getIdGenero())
+                .genero(genero)
                 .build();
     }
 }

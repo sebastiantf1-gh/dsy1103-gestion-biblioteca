@@ -13,6 +13,9 @@ public class WebClientConfig {
     @Value("${services.categorias.url}")
     private String categoriasServiceUrl;
 
+    @Value("${services.generos.url}")
+    private String generosServiceUrl;
+
     @Bean
     public WebClient autoresWebClient(){
         return WebClient.builder()
@@ -27,10 +30,16 @@ public class WebClientConfig {
         return WebClient.builder()
                 .baseUrl(categoriasServiceUrl)
                 .defaultHeader("Content-Type", "application/json")
-                .defaultHeader("Content-Type", "application/json")
+                .defaultHeader("Accept", "application/json")
                 .build();
     }
 
-
-
+    @Bean
+    public WebClient generosWebClient(){
+        return WebClient.builder()
+                .baseUrl(generosServiceUrl)
+                .defaultHeader("Content-Type", "application/json")
+                .defaultHeader("Accept", "application/json")
+                .build();
+    }
 }

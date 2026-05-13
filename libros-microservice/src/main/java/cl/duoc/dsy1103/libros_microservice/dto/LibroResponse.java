@@ -21,5 +21,5 @@ public class LibroResponse {
     private LocalDateTime fechaRegistro;
     private AutorResponse autor;
     private CategoriaResponse categoria;
-    private Long idGenero;
+    private GeneroResponse genero;
 }

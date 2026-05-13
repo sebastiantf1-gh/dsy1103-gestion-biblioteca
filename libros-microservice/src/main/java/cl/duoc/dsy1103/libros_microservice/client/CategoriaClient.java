@@ -1,6 +1,5 @@
 package cl.duoc.dsy1103.libros_microservice.client;
 
-import cl.duoc.dsy1103.libros_microservice.dto.AutorResponse;
 import cl.duoc.dsy1103.libros_microservice.dto.CategoriaResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
