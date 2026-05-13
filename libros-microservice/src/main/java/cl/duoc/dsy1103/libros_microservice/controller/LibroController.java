@@ -57,5 +57,15 @@ public class LibroController {
         libroService.eliminarLibro(id);
         return ResponseEntity.noContent().build();
     }
+    @PatchMapping("/{id}/prestamo")
+    public ResponseEntity<LibroResponse> prestarLibro(@PathVariable Long id){
+        log.info("PATCH /libros/{}/prestamo", id);
+        return ResponseEntity.ok(libroService.prestarLibro(id));
+    }
+    @PatchMapping("/{id}/devolucion")
+    public ResponseEntity<LibroResponse> devolverLibro(@PathVariable Long id){
+        log.info("PATCH /libros/{}/devolucion", id);
+        return ResponseEntity.ok(libroService.devolverLibro(id));
+    }
 
 }

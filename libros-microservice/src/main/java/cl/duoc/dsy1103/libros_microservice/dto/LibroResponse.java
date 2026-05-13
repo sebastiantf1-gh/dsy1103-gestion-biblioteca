@@ -19,7 +19,7 @@ public class LibroResponse {
     private Short numeroPaginas;
     private Boolean disponible;
     private LocalDateTime fechaRegistro;
-    private Long idAutor;
+    private AutorResponse autor;
     private Long idCategoria;
     private Long idGenero;
 }
