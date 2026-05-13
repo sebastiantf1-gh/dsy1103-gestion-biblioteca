@@ -1,4 +1,48 @@
 package cl.duoc.autenticacion_microservice.service;
 
+import cl.duoc.autenticacion_microservice.dto.AutenticacionResponse;
+import cl.duoc.autenticacion_microservice.dto.LoginRequest;
+import cl.duoc.autenticacion_microservice.model.UsuarioPersonal;
+import cl.duoc.autenticacion_microservice.repository.UsuarioPersonalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static reactor.netty.http.HttpConnectionLiveness.log;
+
 public class AutenticacionService {
+    @Autowired
+    private UsuarioPersonalRepository usuarioRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Value("${jwt.expiration}")
+    private Long jwtExpiration;
+
+    public AutenticacionResponse login(LoginRequest request) {
+        // 1. Valida que el usuario exista
+        if (!usuarioRepository.existsByNombreUsuario(request.getNombreUsuario())) {
+            throw new BadCredentialsException("Credenciales inválidas");
+        }
+        // 2. Buscamos al usuario por nombre
+        UsuarioPersonal usuario = usuarioRepository.findByNombreUsuario(request.getNombreUsuario()).get();
+        // 3. Validamos la contraseña
+        if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
+            log.warn("Contraseña incorrecta para el usuario: {}", usuario.getNombreUsuario());
+            throw new BadCredentialsException("Credenciales inválidas");
+        }
+        // 4. Generamos el token para el usuario
+        String token = jwtService.generateToken(usuario);
+        // 5. Retornamos el token
+        return AutenticacionResponse.builder()
+                .token(token)
+                .nombreUsuario(usuario.getNombreUsuario())
+                .expiresIn(jwtExpiration)
+                .build();
+    }
 }
