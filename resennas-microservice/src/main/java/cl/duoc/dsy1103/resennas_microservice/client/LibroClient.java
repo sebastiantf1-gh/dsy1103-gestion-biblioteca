@@ -18,14 +18,13 @@ public class LibroClient {
     private WebClient webClientLibros;
 
     @Value("${services.libros.url}")
-    private String baseUrl;
 
-    public LibroResponse obtenerLibrosPorId(Long id, String token){
+
+    public LibroResponse obtenerLibrosPorId(Long id){
         log.info("Verificando existencia del libro con ID: {}", id);
         try{
             return webClientLibros.get()
                     .uri("/{id}",id)
-                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(LibroResponse.class)
                     .block();

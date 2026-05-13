@@ -1,6 +1,8 @@
 package cl.duoc.dsy1103.resennas_microservice.service;
 
 
+import cl.duoc.dsy1103.resennas_microservice.client.LibroClient;
+import cl.duoc.dsy1103.resennas_microservice.client.UsuarioClient;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaRequest;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaResponse;
 import cl.duoc.dsy1103.resennas_microservice.exception.ConflictException;
@@ -27,8 +29,17 @@ public class ResennaService {
     @Autowired
     private ResennaMapper resennaMapper;
 
+    @Autowired
+    private LibroClient libroClient;
+
+    @Autowired
+    private UsuarioClient usuarioClient;
+
+
     public ResennaResponse crearResenna(ResennaRequest resennaRequest){
         log.info("creando resenna");
+        usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
+        libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){

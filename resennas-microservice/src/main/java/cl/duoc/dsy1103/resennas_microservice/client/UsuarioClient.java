@@ -19,14 +19,13 @@ public class UsuarioClient {
     private WebClient webClientUsuarios;
 
     @Value("${services.usuarios.url}")
-    private String baseUrl;
 
-    public UsuarioResponse obtenerUsuarioPorId(Long id, String token){
+
+    public UsuarioResponse obtenerUsuarioPorId(Long id){
         log.info("Verificando existencia del usuarios con ID: {}", id);
         try{
             return  webClientUsuarios.get()
                     .uri("/{id}", id)
-                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(UsuarioResponse.class)
                     .block();
