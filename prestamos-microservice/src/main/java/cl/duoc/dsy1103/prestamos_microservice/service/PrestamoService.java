@@ -33,6 +33,31 @@ public class PrestamoService {
     @Autowired
     private PrestamoMapper prestamoMapper;
 
+    public PrestamoResponse obtenerPrestamoPorId(Long id) {
+        log.info("Buscando préstamo por ID: {}", id);
+
+        Prestamo prestamo = prestamoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Préstamo no encontrado con el ID: " + id));
+
+        UsuarioResponse usuario = usuarioClient.buscarUsuarioPorId(prestamo.getIdUsuario());
+        LibroResponse libro = libroClient.buscarLibroPorId(prestamo.getIdLibro());
+
+        return prestamoMapper.toResponse(prestamo, usuario, libro);
+    }
+
+    //listar todos los préstamos
+    public List<PrestamoResponse> listarTodosLosPrestamos() {
+        log.info("Obteniendo listado completo de préstamos...");
+
+        return prestamoRepository.findAll().stream()
+                .map(prestamo -> {
+                    UsuarioResponse usuario = usuarioClient.buscarUsuarioPorId(prestamo.getIdUsuario());
+                    LibroResponse libro = libroClient.buscarLibroPorId(prestamo.getIdLibro());
+                    return prestamoMapper.toResponse(prestamo, usuario, libro);
+                })
+                .toList();
+    }
+
     //crear préstamo
     public PrestamoResponse crearPrestamo(PrestamoRequest request) {
         log.info("Iniciando creación de prestamo para Usuario ID: {} y Libro ID: {}",
@@ -128,7 +153,7 @@ public class PrestamoService {
 
         return prestamoRepository.findByEstado(estado.toLowerCase()).stream()
                 .map(prestamo -> {
-                    //datos para mapper
+                    //datos para el response
                     UsuarioResponse usuario = usuarioClient.buscarUsuarioPorId(prestamo.getIdUsuario());
                     LibroResponse libro = libroClient.buscarLibroPorId(prestamo.getIdLibro());
                     return prestamoMapper.toResponse(prestamo, usuario, libro);
