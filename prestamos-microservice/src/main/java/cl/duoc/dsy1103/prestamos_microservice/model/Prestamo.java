@@ -1,0 +1,36 @@
+package cl.duoc.dsy1103.prestamos_microservice.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+import java.time.LocalDateTime;
+
+
+@Entity
+@Table(name = "prestamos")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Prestamo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "fecha_prestamo",nullable = false,updatable = false)
+    private LocalDateTime fechaPrestamo;
+
+    @Column(name = "fecha_devolucion")
+    private LocalDateTime fechaDevolucion;
+
+    @Column (name = "id_usuario", nullable = false)
+    private Long idUsuario;
+
+    @Column (name = "id_libro", nullable = false)
+    private Long idLibro;
+
+}
