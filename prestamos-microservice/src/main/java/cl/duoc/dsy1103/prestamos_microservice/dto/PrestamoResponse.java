@@ -15,7 +15,7 @@ public class PrestamoResponse {
     private Long id;
     private LocalDateTime fechaPrestamo;
     private LocalDateTime fechaDevolucion;
-    private Long idUsuario;
-    private Long idLibro;
+    private UsuarioResponse usuario;
+    private LibroResponse response;
     private String estado;
 }
