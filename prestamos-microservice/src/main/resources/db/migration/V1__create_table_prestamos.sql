@@ -1,0 +1,8 @@
+CREATE TABLE prestamos(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    fecha_prestamo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_devolucion TIMESTAMP NULL,
+    id_usuario BIGINT NOT NULL,
+    id_libro BIGINT NOT NULL,
+    estado VARCHAR(8) NOT NULL
+);

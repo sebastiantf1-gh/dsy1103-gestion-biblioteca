@@ -61,7 +61,7 @@ public class AutorController {
     public ResponseEntity<Void> eliminarAutor(@PathVariable Long id){
         log.info("DELETE /autores/{}", id);
         autorService.eliminarAutor(id);
-        return ResponseEntity.noContent().build(); // no body, con .build() se cierra configuracion y se envía vacío.
+        return ResponseEntity.noContent().build(); // si no hay body, con .build() se cierra configuracion y se envía vacío.
     }
 
 }

@@ -36,6 +36,6 @@ public class Prestamo {
     @Column (name = "id_libro", nullable = false)
     private Long idLibro;
 
-    @Column (nullable = false)
+    @Column (nullable = false, length = 8)
     private String estado;
 }

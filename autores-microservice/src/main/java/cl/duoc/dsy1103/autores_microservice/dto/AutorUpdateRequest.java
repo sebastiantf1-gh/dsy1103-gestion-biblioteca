@@ -1,7 +1,5 @@
 package cl.duoc.dsy1103.autores_microservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -9,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +23,5 @@ public class AutorUpdateRequest {
     private String nacionalidad;
 
     @Past(message = "La fecha de nacimiento debe estar en tiempo pasado.")
-    private LocalDateTime fechaNacimiento;
+    private LocalDate fechaNacimiento;
 }

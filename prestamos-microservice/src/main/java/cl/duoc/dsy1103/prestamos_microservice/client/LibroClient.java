@@ -13,7 +13,7 @@ public class LibroClient {
     @Autowired
     private WebClient libroWebClient;
 
-    // 1. Obtener detalles del libro (Para validar existencia y mostrar título/autor)
+    //btener detalles del libro (para validar existencia y mostrar título)
     public LibroResponse buscarLibroPorId(Long idLibro) {
         log.info("Consultando datos del libro ID: {}", idLibro);
         return libroWebClient.get()
@@ -23,7 +23,7 @@ public class LibroClient {
                 .block();
     }
 
-    // 2. Marcar como prestado (Cambia disponible a false)
+    //marcar como prestado (Cambia disponible a false)
     public LibroResponse marcarComoPrestado(Long idLibro) {
         log.info("Solicitando marcar libro ID: {} como prestado", idLibro);
         return libroWebClient.patch()
@@ -33,7 +33,7 @@ public class LibroClient {
                 .block();
     }
 
-    // 3. Marcar como devuelto (Cambia disponible a true)
+    //marcar como devuelto (Cambia disponible a true)
     public LibroResponse marcarComoDevuelto(Long idLibro) {
         log.info("Solicitando marcar libro ID: {} como disponible", idLibro);
         return libroWebClient.patch()
