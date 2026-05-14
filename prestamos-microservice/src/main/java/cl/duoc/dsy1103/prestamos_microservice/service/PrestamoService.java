@@ -113,7 +113,7 @@ public class PrestamoService {
     }
 
     //historial de prestamos por usuario
-    public List<PrestamoResponse> obtenerHistorialPorUsuario(Long idUsuario) {
+    public List<PrestamoResponse> historialPorUsuario(Long idUsuario) {
         log.info("Consultando historial de préstamos para el usuario ID: {}", idUsuario);
 
         UsuarioResponse usuario = usuarioClient.buscarUsuarioPorId(idUsuario);
@@ -160,4 +160,5 @@ public class PrestamoService {
                 })
                 .toList();
     }
+    //en este microservicio se descarta eliminar y actualizar, porque es un servicio de negocio (transaccional), no de mantenimiento (CRUD).
 }
