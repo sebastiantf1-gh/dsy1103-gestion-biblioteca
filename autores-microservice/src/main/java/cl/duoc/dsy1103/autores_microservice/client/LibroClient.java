@@ -15,7 +15,6 @@ public class LibroClient {
     @Autowired
     private WebClient libroWebClient;
 
-    // Cambiamos el nombre y el tipo de retorno a List<LibroResponse>
     public List<LibroResponse> buscarLibrosPorAutor(Long idAutor) {
         log.info("Obteniendo lista de libros para el autor con ID: {}", idAutor);
         try {
@@ -36,7 +35,7 @@ public class LibroClient {
             }
         } catch (Exception e) {
             log.error("Error inesperado en la comunicación con el microservicio de Libros", e);
-            throw new RuntimeException("Error de comunicación remota");
+            throw new RuntimeException("Error de comunicacion remota");
         }
     }
 }
