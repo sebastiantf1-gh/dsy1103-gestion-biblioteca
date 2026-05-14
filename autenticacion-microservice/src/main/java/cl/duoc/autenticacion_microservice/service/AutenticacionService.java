@@ -25,20 +25,20 @@ public class AutenticacionService {
     private Long jwtExpiration;
 
     public AutenticacionResponse login(LoginRequest request) {
-        // 1. Valida que el usuario exista
+        //Valida que el usuario exista
         if (!usuarioRepository.existsByNombreUsuario(request.getNombreUsuario())) {
             throw new BadCredentialsException("Credenciales inválidas");
         }
-        // 2. Buscamos al usuario por nombre
+        //Buscamos al usuario por nombre
         UsuarioPersonal usuario = usuarioRepository.findByNombreUsuario(request.getNombreUsuario()).get();
-        // 3. Validamos la contraseña
+        //Validamos la contraseña
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
             log.warn("Contraseña incorrecta para el usuario: {}", usuario.getNombreUsuario());
             throw new BadCredentialsException("Credenciales inválidas");
         }
-        // 4. Generamos el token para el usuario
+        //Generamos el token para el usuario
         String token = jwtService.generateToken(usuario);
-        // 5. Retornamos el token
+        //Retornamos el token
         return AutenticacionResponse.builder()
                 .token(token)
                 .nombreUsuario(usuario.getNombreUsuario())
