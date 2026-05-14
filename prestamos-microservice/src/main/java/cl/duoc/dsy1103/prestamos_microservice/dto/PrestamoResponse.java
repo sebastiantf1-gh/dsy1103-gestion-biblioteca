@@ -17,4 +17,5 @@ public class PrestamoResponse {
     private LocalDateTime fechaDevolucion;
     private Long idUsuario;
     private Long idLibro;
+    private String estado;
 }

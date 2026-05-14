@@ -1,4 +1,4 @@
-package cl.duoc.dsy1103.libros_microservice.dto;
+package cl.duoc.dsy1103.prestamos_microservice.dto;
 
 import lombok.Builder;
 import lombok.Data;
