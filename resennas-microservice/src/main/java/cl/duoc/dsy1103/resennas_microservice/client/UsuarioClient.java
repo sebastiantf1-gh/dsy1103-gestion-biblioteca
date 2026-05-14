@@ -18,7 +18,7 @@ public class UsuarioClient {
     @Autowired
     private WebClient webClientUsuarios;
 
-    @Value("${services.usuarios.url}")
+
 
 
     public UsuarioResponse obtenerUsuarioPorId(Long id){

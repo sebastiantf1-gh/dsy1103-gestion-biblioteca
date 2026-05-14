@@ -17,7 +17,7 @@ public class LibroClient {
     @Autowired
     private WebClient webClientLibros;
 
-    @Value("${services.libros.url}")
+
 
 
     public LibroResponse obtenerLibrosPorId(Long id){
