@@ -42,7 +42,7 @@ public class GeneroController {
         return ResponseEntity.ok(generoService.listarGeneros());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<GeneroResponse> buscarGeneroPorId(@PathVariable Long id){
         log.info("Get /generos/{}", id);
         return ResponseEntity.ok(generoService.buscarGeneroPorId(id));
