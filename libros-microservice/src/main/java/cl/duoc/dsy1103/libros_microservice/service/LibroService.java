@@ -57,6 +57,30 @@ public class LibroService {
                 })
                 .toList();
     }
+    //libros por categoria
+    public List<LibroResponse> buscarLibrosPorCategoria(Long idCategoria){
+        log.info("Obteniendo libros de categoria con ID: {} ", idCategoria);
+        return libroRepository.findByIdCategoria(idCategoria).stream()
+                .map(libro -> {
+                    AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
+                    CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+                    GeneroResponse genero = generoClient.buscarGeneroPorId(libro.getIdGenero());
+                    return libroMapper.toResponse(libro, autor, categoria, genero);
+                })
+                .toList();
+    }
+    //libros por género
+    public List<LibroResponse> buscarLibrosPorGenero(Long idGenero){
+        log.info("Obteniendo libros de genero con ID: {} ", idGenero);
+        return libroRepository.findByIdGenero(idGenero).stream()
+                .map(libro -> {
+                    AutorResponse autor = autorClient.buscarAutorPorId(libro.getIdAutor());
+                    CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libro.getIdCategoria());
+                    GeneroResponse genero = generoClient.buscarGeneroPorId(libro.getIdGenero());
+                    return libroMapper.toResponse(libro, autor, categoria, genero);
+                })
+                .toList();
+    }
     //libro por ID
     public LibroResponse buscarLibroPorId(Long id){
         log.info("Obteniendo libros con ID: {} ",id);

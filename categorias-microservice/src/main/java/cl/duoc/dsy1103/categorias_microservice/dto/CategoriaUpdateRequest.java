@@ -17,5 +17,4 @@ public class CategoriaUpdateRequest {
     @Size(max = 250, message = "La descripcion debe tener como maximo 250 caracteres.")
     private String descripcion;
 
-    private Long idLibro;
 }

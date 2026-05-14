@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,5 +15,5 @@ public class CategoriaResponse {
     private Long id;
     private String nombre;
     private String descripcion;
-    private Long idLibro;
+    private List<LibroResponse> libros;
 }

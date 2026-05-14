@@ -2,8 +2,11 @@ package cl.duoc.dsy1103.autores_microservice.mapper;
 
 import cl.duoc.dsy1103.autores_microservice.dto.AutorRequest;
 import cl.duoc.dsy1103.autores_microservice.dto.AutorResponse;
+import cl.duoc.dsy1103.autores_microservice.dto.LibroResponse;
 import cl.duoc.dsy1103.autores_microservice.model.Autor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class AutorMapper {
@@ -16,7 +19,7 @@ public class AutorMapper {
                 .build();
     }
 
-    public AutorResponse toResponse(Autor autor){
+    public AutorResponse toResponse(Autor autor, List<LibroResponse> libros){
         return AutorResponse.builder()
                 .id(autor.getId())
                 .nombreCompleto(autor.getNombreCompleto())
@@ -24,6 +27,7 @@ public class AutorMapper {
                 .nacionalidad(autor.getNacionalidad())
                 .fechaNacimiento(autor.getFechaNacimiento())
                 .fechaRegistro(autor.getFechaRegistro())
+                .libros(libros)
                 .build();
     }
 }

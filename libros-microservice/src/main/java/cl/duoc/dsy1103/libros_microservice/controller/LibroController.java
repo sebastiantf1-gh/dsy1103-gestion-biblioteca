@@ -33,6 +33,27 @@ public class LibroController {
         return ResponseEntity.ok(libroService.buscarLibroPorId(id));
     }
 
+    @GetMapping("/autor/{idAutor}")
+    public ResponseEntity<List<LibroResponse>> buscarLibrosPorAutor(@PathVariable Long idAutor) {
+        log.info("GET /libros/autor/{}", idAutor);
+        List<LibroResponse> libros = libroService.buscarLibrosPorAutor(idAutor);
+        return ResponseEntity.ok(libros);
+    }
+
+    @GetMapping("/categoria/{idCategoria}")
+    public ResponseEntity<List<LibroResponse>> buscarLibrosPorCategoria(@PathVariable Long idCategoria) {
+        log.info("GET /libros/categoria/{}", idCategoria);
+        List<LibroResponse> libros = libroService.buscarLibrosPorCategoria(idCategoria);
+        return ResponseEntity.ok(libros);
+    }
+
+    @GetMapping("/genero/{idGenero}")
+    public ResponseEntity<List<LibroResponse>> buscarLibrosPorGenero(@PathVariable Long idGenero) {
+        log.info("GET /libros/genero/{}", idGenero);
+        List<LibroResponse> libros = libroService.buscarLibrosPorGenero(idGenero);
+        return ResponseEntity.ok(libros);
+    }
+
     @PostMapping
     public ResponseEntity<LibroResponse> crearLibro(@Valid @RequestBody LibroRequest libro){
         log.info("POST /libros");

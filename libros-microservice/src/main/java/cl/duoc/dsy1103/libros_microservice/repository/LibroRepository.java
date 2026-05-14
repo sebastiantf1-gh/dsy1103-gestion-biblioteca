@@ -16,4 +16,8 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 
     List<Libro> findByIdAutor(Long idAutor);
 
+    List<Libro> findByIdCategoria(Long idCategoria);
+
+    List<Libro> findByIdGenero(Long idGenero);
+
 }

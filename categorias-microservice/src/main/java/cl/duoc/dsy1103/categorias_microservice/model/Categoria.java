@@ -22,7 +22,4 @@ public class Categoria {
 
     @Column(nullable = false, length = 250)
     private String descripcion;
-
-    @Column(name = "id_libro", nullable = false)
-    private Long idLibro;
 }

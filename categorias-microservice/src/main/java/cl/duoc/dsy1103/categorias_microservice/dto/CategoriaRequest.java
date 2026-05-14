@@ -21,7 +21,4 @@ public class CategoriaRequest {
     @NotBlank(message = "La descripcion es obligatoria.")
     @Size(max = 250, message = "La descripcion debe tener como maximo 250 caracteres.")
     private String descripcion;
-
-    @NotNull(message = "El ID de libro es obligatorio.")
-    private Long idLibro;
 }
