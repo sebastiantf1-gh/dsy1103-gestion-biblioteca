@@ -1,7 +1,9 @@
 package cl.duoc.dsy1103.prestamos_microservice.dto;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +25,8 @@ public class PrestamoRequest {
 
     @NotNull(message = "El id del libro es obligatorio")
     private Long idLibro;
+
+    @NotBlank(message = "El estado es obligatorio.")
+    @Pattern(regexp = "activo|devuelto", message = "El estado debe ser 'activo' o 'devuelto'")
+    private String estado;
 }

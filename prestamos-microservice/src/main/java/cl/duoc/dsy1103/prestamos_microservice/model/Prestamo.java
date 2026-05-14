@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import java.time.LocalDateTime;
 
-
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "prestamos")
 @Data
 @AllArgsConstructor
@@ -21,7 +23,8 @@ public class Prestamo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fecha_prestamo",nullable = false,updatable = false)
+    @Column(name = "fecha_prestamo",nullable = false, updatable = false)
+    @CreatedDate
     private LocalDateTime fechaPrestamo;
 
     @Column(name = "fecha_devolucion")
@@ -33,4 +36,6 @@ public class Prestamo {
     @Column (name = "id_libro", nullable = false)
     private Long idLibro;
 
+    @Column (nullable = false)
+    private String estado;
 }

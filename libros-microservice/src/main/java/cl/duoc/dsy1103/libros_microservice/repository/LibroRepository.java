@@ -10,10 +10,6 @@ import java.util.Optional;
 @Repository
 public interface LibroRepository extends JpaRepository<Libro, Long> {
 
-    Optional<Libro> findById(Long id);
-
-    boolean existsById(Long id);
-
     List<Libro> findByIdAutor(Long idAutor);
 
     List<Libro> findByIdCategoria(Long idCategoria);
