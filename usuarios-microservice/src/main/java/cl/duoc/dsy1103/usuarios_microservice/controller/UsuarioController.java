@@ -2,6 +2,7 @@ package cl.duoc.dsy1103.usuarios_microservice.controller;
 
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioRequest;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioResponse;
+import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioUpdateRequest;
 import cl.duoc.dsy1103.usuarios_microservice.model.Usuario;
 import cl.duoc.dsy1103.usuarios_microservice.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -49,9 +50,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> modificarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequest usuarioRequest){
+    public ResponseEntity<UsuarioResponse> modificarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateRequest usuarioUpdateRequest){
         log.info("Put /usuarios/{}", id);
-        return ResponseEntity.ok(usuarioService.modificarUsuario(id, usuarioRequest));
+        return ResponseEntity.ok(usuarioService.modificarUsuario(id, usuarioUpdateRequest));
 
     }
 

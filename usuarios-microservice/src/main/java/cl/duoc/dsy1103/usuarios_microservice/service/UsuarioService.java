@@ -2,6 +2,7 @@ package cl.duoc.dsy1103.usuarios_microservice.service;
 
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioRequest;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioResponse;
+import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioUpdateRequest;
 import cl.duoc.dsy1103.usuarios_microservice.mapper.UsuarioMapper;
 import cl.duoc.dsy1103.usuarios_microservice.model.Usuario;
 import cl.duoc.dsy1103.usuarios_microservice.repository.UsuarioRepository;
@@ -48,16 +49,22 @@ public class UsuarioService {
         return usuarioMapper.toResponse(usuario1);
     }
 
-    public UsuarioResponse modificarUsuario(Long id,UsuarioRequest usuarioRequest){
+    public UsuarioResponse modificarUsuario(Long id, UsuarioUpdateRequest request){
         log.info("modificando usuario id: {}", id);
-        Usuario usuarioAModificar = usuarioRepository.findById(id)
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("usuario no encontrado :" + id));
 
-        usuarioAModificar.setNombreCompleto(usuarioRequest.getNombreCompleto());
-        usuarioAModificar.setEmail(usuarioRequest.getEmail());
-        usuarioAModificar.setTelefono(usuarioRequest.getTelefono());
+        if(request.getNombreCompleto()!=null){
+            usuario.setNombreCompleto(request.getNombreCompleto());
+        }
+        if(request.getTelefono()!=null){
+            usuario.setTelefono(request.getTelefono());
+        }
+        if(request.getEmail()!=null){
+            usuario.setEmail(request.getEmail());
+        }
 
-        Usuario usuarioModificado = usuarioRepository.save(usuarioAModificar);
+        Usuario usuarioModificado = usuarioRepository.save(usuario);
         return usuarioMapper.toResponse(usuarioModificado);
     }
 
