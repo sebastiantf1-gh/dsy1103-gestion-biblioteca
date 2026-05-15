@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -24,7 +25,7 @@ public class GeneroController {
     private GeneroService generoService;
 
     @PostMapping
-    public ResponseEntity agregarGenero(@Valid @RequestBody GeneroRequest generoRequest){
+    public ResponseEntity<GeneroResponse> agregarGenero(@Valid @RequestBody GeneroRequest generoRequest){
         log.info("Post /generos");
         GeneroResponse generoAgregado = generoService.agregarGenero(generoRequest);
         URI location = ServletUriComponentsBuilder
@@ -37,8 +38,8 @@ public class GeneroController {
     }
 
     @GetMapping
-    public ResponseEntity listarGeneros(){
-        log.info("Get /usuarios");
+    public ResponseEntity<List<GeneroResponse>> listarGeneros(){
+        log.info("Get /generos");
         return ResponseEntity.ok(generoService.listarGeneros());
     }
 
@@ -51,7 +52,7 @@ public class GeneroController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GeneroResponse> modificarGenero(@PathVariable Long id, @Valid @RequestBody GeneroRequest generoRequest){
-        log.info("Put /usuarios/{}", id);
+        log.info("Put /generos/{}", id);
         return ResponseEntity.ok(generoService.modificarGenero(id, generoRequest));
 
     }
