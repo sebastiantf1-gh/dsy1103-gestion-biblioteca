@@ -3,6 +3,7 @@ package cl.duoc.dsy1103.prestamos_microservice.client;
 import cl.duoc.dsy1103.prestamos_microservice.dto.LibroResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -11,9 +12,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 public class LibroClient {
     @Autowired
+    @Qualifier("librosWebClient")
     private WebClient libroWebClient;
 
-    //btener detalles del libro (para validar existencia y mostrar título)
+    //obtener detalles del libro (para validar existencia y mostrar título)
     public LibroResponse buscarLibroPorId(Long idLibro) {
         log.info("Consultando datos del libro ID: {}", idLibro);
         return libroWebClient.get()
