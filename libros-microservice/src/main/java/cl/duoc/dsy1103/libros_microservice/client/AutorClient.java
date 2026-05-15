@@ -19,7 +19,7 @@ public class AutorClient {
         log.info("Obteniendo autor con ID: {}", idAutor);
         try{
             return autoresWebClient.get()
-                    .uri("/autores/{idAutor}")
+                    .uri("/autores/{idAutor}", idAutor)
                     .retrieve()
                     .bodyToMono(AutorResponse.class)
                     .block();

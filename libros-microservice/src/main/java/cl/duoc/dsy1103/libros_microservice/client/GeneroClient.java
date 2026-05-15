@@ -19,7 +19,7 @@ public class GeneroClient {
         log.info("Obteniendo genero con ID: {}", idGenero);
         try {
             return generosWebClient.get()
-                    .uri("/generos/{idGenero}")
+                    .uri("/generos/{idGenero}", idGenero)
                     .retrieve()
                     .bodyToMono(GeneroResponse.class)
                     .block();

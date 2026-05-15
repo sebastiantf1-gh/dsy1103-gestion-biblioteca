@@ -19,7 +19,7 @@ public class CategoriaClient {
         log.info("Obteniendo categoria con ID: {}", idCategoria);
         try {
             return categoriasWebClient.get()
-                    .uri("/categorias/{idCategoria}")
+                    .uri("/categorias/{idCategoria}", idCategoria)
                     .retrieve()
                     .bodyToMono(CategoriaResponse.class)
                     .block();
