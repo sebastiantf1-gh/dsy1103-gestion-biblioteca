@@ -35,7 +35,7 @@ public class PrestamoController {
         log.info("GET /prestamos/{}", id);
         return ResponseEntity.ok(prestamoService.obtenerPrestamoPorId(id));
     }
-    //historial de préstamos por lsuario
+    //historial de préstamos por usuario
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<PrestamoResponse>> historialPorUsuario(@PathVariable Long idUsuario) {
         log.info("GET /prestamos/usuario/{}", idUsuario);
