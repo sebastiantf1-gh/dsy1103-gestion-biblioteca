@@ -3,7 +3,7 @@ package cl.duoc.dsy1103.usuarios_microservice.controller;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioRequest;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioResponse;
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioUpdateRequest;
-import cl.duoc.dsy1103.usuarios_microservice.model.Usuario;
+
 import cl.duoc.dsy1103.usuarios_microservice.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 
 @RestController

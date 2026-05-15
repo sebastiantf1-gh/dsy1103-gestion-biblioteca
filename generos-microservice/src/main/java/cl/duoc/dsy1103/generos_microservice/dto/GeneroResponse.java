@@ -1,6 +1,6 @@
 package cl.duoc.dsy1103.generos_microservice.dto;
 
-import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

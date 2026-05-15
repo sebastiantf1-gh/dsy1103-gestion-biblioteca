@@ -2,7 +2,7 @@ package cl.duoc.dsy1103.resennas_microservice.client;
 
 
 import cl.duoc.dsy1103.resennas_microservice.dto.UsuarioResponse;
-import org.springframework.beans.factory.annotation.Value;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

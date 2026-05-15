@@ -5,7 +5,7 @@ import cl.duoc.dsy1103.generos_microservice.dto.GeneroRequest;
 import cl.duoc.dsy1103.generos_microservice.dto.GeneroResponse;
 import cl.duoc.dsy1103.generos_microservice.model.Genero;
 import org.springframework.stereotype.Component;
-import tools.jackson.core.base.GeneratorBase;
+
 
 @Component
 public class GeneroMapper {
