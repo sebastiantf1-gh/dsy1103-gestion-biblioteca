@@ -3,6 +3,7 @@ package cl.duoc.dsy1103.libros_microservice.client;
 import cl.duoc.dsy1103.libros_microservice.dto.GeneroResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -12,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class GeneroClient {
 
     @Autowired
+    @Qualifier("generosWebClient")
     private WebClient generoWebClient;
 
     public GeneroResponse buscarGeneroPorId(Long idGenero){
