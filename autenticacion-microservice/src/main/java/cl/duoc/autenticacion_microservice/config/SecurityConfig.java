@@ -25,11 +25,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/v1/auth/**")
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+
+        /* esto se comenta para desactivar seguridad
+        auth -> auth.requestMatchers("/v1/auth/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        */
         return http.build();
     }
 
