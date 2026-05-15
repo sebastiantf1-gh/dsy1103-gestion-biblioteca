@@ -13,8 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class UsuarioClient {
 
     @Autowired
-    @Qualifier("usuariosWebClient")
-    private WebClient usuarioWebClient;
+    private WebClient usuariosWebClient;
 
     /**
      * Busca un usuario por su ID en el microservicio de Usuarios,
@@ -23,7 +22,7 @@ public class UsuarioClient {
     public UsuarioResponse buscarUsuarioPorId(Long idUsuario) {
         log.info("Consultando datos del usuario con ID: {}", idUsuario);
         try {
-            return usuarioWebClient.get()
+            return usuariosWebClient.get()
                     .uri("/usuarios/{id}", idUsuario)
                     .retrieve()
                     .bodyToMono(UsuarioResponse.class)

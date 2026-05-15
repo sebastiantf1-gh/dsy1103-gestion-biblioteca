@@ -13,13 +13,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class AutorClient {
 
     @Autowired
-    @Qualifier("autoresWebClient")
-    private WebClient autorWebClient;
+    private WebClient autoresWebClient;
 
     public AutorResponse buscarAutorPorId(Long idAutor){
         log.info("Obteniendo autor con ID: {}", idAutor);
         try{
-            return autorWebClient.get()
+            return autoresWebClient.get()
                     .uri("/autores/{idAutor}")
                     .retrieve()
                     .bodyToMono(AutorResponse.class)

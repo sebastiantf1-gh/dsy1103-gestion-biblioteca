@@ -13,13 +13,13 @@ import java.util.List;
 @Slf4j
 public class LibroClient {
     @Autowired
-    private WebClient libroWebClient;
+    private WebClient librosWebClient;
 
     // Cambiamos el nombre y el tipo de retorno a List<LibroResponse>
     public List<LibroResponse> buscarLibrosPorCategoria(Long idCategoria) {
         log.info("Obteniendo lista de libros para la categoria con ID: {}", idCategoria);
         try {
-            return libroWebClient.get()
+            return librosWebClient.get()
                     .uri("/libros/categoria/{idCategoria}", idCategoria)
                     .retrieve()
                     .bodyToFlux(LibroResponse.class)

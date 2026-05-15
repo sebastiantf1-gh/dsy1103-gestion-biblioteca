@@ -13,13 +13,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class CategoriaClient {
 
     @Autowired
-    @Qualifier("categoriasWebClient")
-    private WebClient categoriaWebClient;
+    private WebClient categoriasWebClient;
 
     public CategoriaResponse buscarCategoriaPorId(Long idCategoria){
         log.info("Obteniendo categoria con ID: {}", idCategoria);
         try {
-            return categoriaWebClient.get()
+            return categoriasWebClient.get()
                     .uri("/categorias/{idCategoria}")
                     .retrieve()
                     .bodyToMono(CategoriaResponse.class)

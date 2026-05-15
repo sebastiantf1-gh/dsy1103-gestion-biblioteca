@@ -12,13 +12,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 public class LibroClient {
     @Autowired
-    @Qualifier("librosWebClient")
-    private WebClient libroWebClient;
+    private WebClient librosWebClient;
 
     //obtener detalles del libro (para validar existencia y mostrar título)
     public LibroResponse buscarLibroPorId(Long idLibro) {
         log.info("Consultando datos del libro ID: {}", idLibro);
-        return libroWebClient.get()
+        return librosWebClient.get()
                 .uri("/libros/{id}", idLibro)
                 .retrieve()
                 .bodyToMono(LibroResponse.class)
@@ -28,7 +27,7 @@ public class LibroClient {
     //marcar como prestado (Cambia disponible a false)
     public LibroResponse marcarComoPrestado(Long idLibro) {
         log.info("Solicitando marcar libro ID: {} como prestado", idLibro);
-        return libroWebClient.patch()
+        return librosWebClient.patch()
                 .uri("/libros/{id}/prestamo", idLibro)
                 .retrieve()
                 .bodyToMono(LibroResponse.class)
@@ -38,7 +37,7 @@ public class LibroClient {
     //marcar como devuelto (Cambia disponible a true)
     public LibroResponse marcarComoDevuelto(Long idLibro) {
         log.info("Solicitando marcar libro ID: {} como disponible", idLibro);
-        return libroWebClient.patch()
+        return librosWebClient.patch()
                 .uri("/libros/{id}/devolucion", idLibro)
                 .retrieve()
                 .bodyToMono(LibroResponse.class)

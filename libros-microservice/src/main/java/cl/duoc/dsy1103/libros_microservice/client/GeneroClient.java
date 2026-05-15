@@ -13,13 +13,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class GeneroClient {
 
     @Autowired
-    @Qualifier("generosWebClient")
-    private WebClient generoWebClient;
+    private WebClient generosWebClient;
 
     public GeneroResponse buscarGeneroPorId(Long idGenero){
         log.info("Obteniendo genero con ID: {}", idGenero);
         try {
-            return generoWebClient.get()
+            return generosWebClient.get()
                     .uri("/generos/{idGenero}")
                     .retrieve()
                     .bodyToMono(GeneroResponse.class)
