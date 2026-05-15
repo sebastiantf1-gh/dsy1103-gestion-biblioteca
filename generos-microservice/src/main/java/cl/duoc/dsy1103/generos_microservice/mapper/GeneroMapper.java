@@ -17,7 +17,7 @@ public class GeneroMapper {
                 .build();
     }
 
-    public GeneroResponse toRespone(Genero genero){
+    public GeneroResponse toResponse(Genero genero){
         return GeneroResponse.builder()
                 .id(genero.getId())
                 .nombreGenero(genero.getNombreGenero())
