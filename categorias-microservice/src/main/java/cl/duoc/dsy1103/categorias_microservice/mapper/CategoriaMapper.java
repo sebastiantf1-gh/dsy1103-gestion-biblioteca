@@ -16,12 +16,11 @@ public class CategoriaMapper {
                 .descripcion(request.getDescripcion())
                 .build();
     }
-    public CategoriaResponse toResponse(Categoria categoria, List<LibroResponse> libros){
+    public CategoriaResponse toResponse(Categoria categoria){
         return CategoriaResponse.builder()
                 .id(categoria.getId())
                 .nombre(categoria.getNombre())
                 .descripcion(categoria.getDescripcion())
-                .libros(libros)
                 .build();
     }
 }

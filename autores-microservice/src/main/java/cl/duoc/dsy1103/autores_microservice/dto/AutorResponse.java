@@ -20,5 +20,4 @@ public class AutorResponse {
     private String nacionalidad;
     private LocalDate fechaNacimiento;
     private LocalDateTime fechaRegistro;
-    private List<LibroResponse> libros;
 }

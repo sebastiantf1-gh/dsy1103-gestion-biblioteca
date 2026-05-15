@@ -19,7 +19,8 @@ public class AutorMapper {
                 .build();
     }
 
-    public AutorResponse toResponse(Autor autor, List<LibroResponse> libros){
+    public AutorResponse toResponse(Autor autor){
+        if (autor == null) return  null;
         return AutorResponse.builder()
                 .id(autor.getId())
                 .nombreCompleto(autor.getNombreCompleto())
@@ -27,7 +28,6 @@ public class AutorMapper {
                 .nacionalidad(autor.getNacionalidad())
                 .fechaNacimiento(autor.getFechaNacimiento())
                 .fechaRegistro(autor.getFechaRegistro())
-                .libros(libros)
                 .build();
     }
 }

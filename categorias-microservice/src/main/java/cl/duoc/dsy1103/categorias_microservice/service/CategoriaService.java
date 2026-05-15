@@ -25,15 +25,11 @@ public class CategoriaService {
     @Autowired
     private CategoriaMapper categoriaMapper;
 
-    @Autowired
-    private LibroClient libroClient;
-
     public List<CategoriaResponse> buscarCategorias(){
         log.info("Obteniendo todas las categorias con sus libros...");
         return categoriaRepository.findAll().stream()
                 .map(categoria -> {
-                    List<LibroResponse> libros = libroClient.buscarLibrosPorCategoria(categoria.getId());
-                    return categoriaMapper.toResponse(categoria,libros);
+                    return categoriaMapper.toResponse(categoria);
                 })
                 .toList();
     }
@@ -42,14 +38,13 @@ public class CategoriaService {
         log.info("Obteniendo categoria con ID: {}", id);
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No se encontro categoria con ID: " + id));
-        List<LibroResponse> libros = libroClient.buscarLibrosPorCategoria(id);
-        return categoriaMapper.toResponse(categoria, libros);
+        return categoriaMapper.toResponse(categoria);
     }
 
     public CategoriaResponse crearCategoria (CategoriaRequest categoriaRequest){
         log.info("Creando nueva categoria: {}", categoriaRequest.getNombre());
         Categoria categoria = categoriaRepository.save(categoriaMapper.toEntity(categoriaRequest));
-        return categoriaMapper.toResponse(categoria, Collections.emptyList());
+        return categoriaMapper.toResponse(categoria);
     }
 
     public CategoriaResponse actualizarCategoria(Long id, CategoriaUpdateRequest request){
@@ -64,8 +59,7 @@ public class CategoriaService {
             categoria.setDescripcion(request.getDescripcion());
         }
         Categoria categoriaActualizada = categoriaRepository.save(categoria);
-        List<LibroResponse> libros = libroClient.buscarLibrosPorCategoria(id);
-         return categoriaMapper.toResponse(categoriaActualizada, libros);
+         return categoriaMapper.toResponse(categoriaActualizada);
     }
 
     public void eliminarCategoria(Long id){
