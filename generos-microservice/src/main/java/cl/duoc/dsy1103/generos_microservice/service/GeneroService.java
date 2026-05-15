@@ -2,6 +2,7 @@ package cl.duoc.dsy1103.generos_microservice.service;
 
 import cl.duoc.dsy1103.generos_microservice.dto.GeneroRequest;
 import cl.duoc.dsy1103.generos_microservice.dto.GeneroResponse;
+import cl.duoc.dsy1103.generos_microservice.dto.GeneroUpdateRequest;
 import cl.duoc.dsy1103.generos_microservice.mapper.GeneroMapper;
 import cl.duoc.dsy1103.generos_microservice.model.Genero;
 import cl.duoc.dsy1103.generos_microservice.repository.GeneroRepository;
@@ -29,33 +30,37 @@ public class GeneroService {
     public GeneroResponse agregarGenero(GeneroRequest generoRequest){
         log.info("agregando genero: {}", generoRequest.getNombreGenero());
         Genero genero = generoRepository.save(generoMapper.fromRequest(generoRequest));
-        return generoMapper.toRespone(genero);
+        return generoMapper.toResponse(genero);
     }
 
     public List<GeneroResponse> listarGeneros(){
         log.info("listando todos los generos");
         List<Genero> generos = generoRepository.findAll();
         return generos.stream()
-                .map(generoMapper::toRespone)
+                .map(generoMapper::toResponse)
                 .toList();
     }
     public GeneroResponse buscarGeneroPorId(Long id){
         log.info("buscando id: {} ", id);
         Genero genero = generoRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("No se encontro el genero con id: " + id));
-        return generoMapper.toRespone(genero);
+        return generoMapper.toResponse(genero);
     }
-    public GeneroResponse modificarGenero(Long id, GeneroRequest generoRequest){
+    public GeneroResponse modificarGenero(Long id, GeneroUpdateRequest request){
         log.info("modificando Genero id: {}", id);
-        Genero generoModificar = generoRepository.findById(id)
+        Genero genero = generoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("genero no encontrado :" + id));
 
-        generoModificar.setNombreGenero(generoRequest.getNombreGenero());
-        generoModificar.setDescripcion(generoRequest.getDescripcion());
+        if(request.getNombreGenero()!=null){
+            genero.setNombreGenero(request.getNombreGenero());
+        }
+        if(request.getDescripcion()!=null){
+            genero.setDescripcion(request.getDescripcion());
+        }
 
 
-        Genero generoModificado = generoRepository.save(generoModificar);
-        return generoMapper.toRespone(generoModificado);
+        Genero generoModificado = generoRepository.save(genero);
+        return generoMapper.toResponse(generoModificado);
     }
     public void eliminarGenero(Long id){
         log.info("Eliminando Genero Id: {}", id);

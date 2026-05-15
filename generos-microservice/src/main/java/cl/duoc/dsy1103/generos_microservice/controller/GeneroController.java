@@ -3,6 +3,7 @@ package cl.duoc.dsy1103.generos_microservice.controller;
 
 import cl.duoc.dsy1103.generos_microservice.dto.GeneroRequest;
 import cl.duoc.dsy1103.generos_microservice.dto.GeneroResponse;
+import cl.duoc.dsy1103.generos_microservice.dto.GeneroUpdateRequest;
 import cl.duoc.dsy1103.generos_microservice.service.GeneroService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +52,9 @@ public class GeneroController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GeneroResponse> modificarGenero(@PathVariable Long id, @Valid @RequestBody GeneroRequest generoRequest){
+    public ResponseEntity<GeneroResponse> modificarGenero(@PathVariable Long id, @Valid @RequestBody GeneroUpdateRequest generoUpdateRequest){
         log.info("Put /generos/{}", id);
-        return ResponseEntity.ok(generoService.modificarGenero(id, generoRequest));
+        return ResponseEntity.ok(generoService.modificarGenero(id, generoUpdateRequest));
 
     }
 
