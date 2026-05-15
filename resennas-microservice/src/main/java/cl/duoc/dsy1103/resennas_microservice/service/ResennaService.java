@@ -5,6 +5,7 @@ import cl.duoc.dsy1103.resennas_microservice.client.LibroClient;
 import cl.duoc.dsy1103.resennas_microservice.client.UsuarioClient;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaRequest;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaResponse;
+import cl.duoc.dsy1103.resennas_microservice.dto.ResennaUpdateRequest;
 import cl.duoc.dsy1103.resennas_microservice.exception.ConflictException;
 import cl.duoc.dsy1103.resennas_microservice.mapper.ResennaMapper;
 import cl.duoc.dsy1103.resennas_microservice.model.Resenna;
@@ -65,17 +66,20 @@ public class ResennaService {
                 .map(resennaMapper::toResponse)
                 .toList();
     }
-    public ResennaResponse modificarResenna(Long id, ResennaRequest resennaRequest){
+    public ResennaResponse modificarResenna(Long id, ResennaUpdateRequest request){
         log.info("modificando resenna: {}", id);
-        Resenna resennaAModificar = resennaRepository.findById(id)
+        Resenna resenna = resennaRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("Resenna no encontrada"));
-        resennaAModificar.setCalificacion(resennaRequest.getCalificacion());
-        resennaAModificar.setDescripcion(resennaRequest.getDescripcion());
-        resennaAModificar.setIdLibro(resennaRequest.getIdLibro());
 
-        Resenna resennaModificada = resennaRepository.save(resennaAModificar);
+        if(request.getCalificacion()!=null){
+            resenna.setCalificacion(request.getCalificacion());
+        }
+        if(request.getDescripcion()!=null){
+            resenna.setDescripcion(request.getDescripcion());
+        }
+
+        Resenna resennaModificada = resennaRepository.save(resenna);
         return resennaMapper.toResponse(resennaModificada);
-
     }
 
     public void eliminarResenna(Long id){

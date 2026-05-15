@@ -2,6 +2,7 @@ package cl.duoc.dsy1103.resennas_microservice.controller;
 
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaRequest;
 import cl.duoc.dsy1103.resennas_microservice.dto.ResennaResponse;
+import cl.duoc.dsy1103.resennas_microservice.dto.ResennaUpdateRequest;
 import cl.duoc.dsy1103.resennas_microservice.service.ResennaService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +47,9 @@ public class ResennaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResennaResponse> modificarResenna(@PathVariable Long id,@Valid @RequestBody ResennaRequest resennaRequest){
+    public ResponseEntity<ResennaResponse> modificarResenna(@PathVariable Long id,@Valid @RequestBody ResennaUpdateRequest resennaUpdateRequest){
         log.info("Put /resennas/{}", id);
-        return ResponseEntity.ok(resennaService.modificarResenna(id,resennaRequest));
+        return ResponseEntity.ok(resennaService.modificarResenna(id,resennaUpdateRequest));
 
     }
 
