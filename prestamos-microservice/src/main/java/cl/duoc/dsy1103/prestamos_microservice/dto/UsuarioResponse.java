@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioResponse {
     private Long id;
-    private String NombreCompleto;
+    private String nombreCompleto;
 }
