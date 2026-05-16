@@ -16,6 +16,6 @@ public class PrestamoResponse {
     private LocalDateTime fechaPrestamo;
     private LocalDateTime fechaDevolucion;
     private UsuarioResponse usuario;
-    private LibroResponse response;
+    private LibroResponse libro;
     private String estado;
 }
