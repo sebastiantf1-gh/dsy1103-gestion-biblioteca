@@ -29,17 +29,4 @@ public class ResennaMapper {
                 .fechaRegistro(resenna.getFechaRegistro())
                 .build();
     }
-
-    public ResennaResponse toResponse(Resenna resenna) {
-        if (resenna == null) return null;
-
-        return ResennaResponse.builder()
-                .id(resenna.getId())
-                .tituloLibro(null)
-                .nombreDeUsuario(null)
-                .calificacion(resenna.getCalificacion())
-                .descripcion(resenna.getDescripcion())
-                .fechaRegistro(resenna.getFechaRegistro())
-                .build();
-    }
 }
