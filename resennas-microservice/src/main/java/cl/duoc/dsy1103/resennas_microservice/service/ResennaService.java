@@ -37,8 +37,7 @@ public class ResennaService {
 
     public ResennaResponse crearResenna(ResennaRequest resennaRequest){
         log.info("creando resenna");
-        usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
-        libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
+
         LibroResponse libro = libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
         UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
