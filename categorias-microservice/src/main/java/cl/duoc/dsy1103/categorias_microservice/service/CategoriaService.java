@@ -1,10 +1,8 @@
 package cl.duoc.dsy1103.categorias_microservice.service;
 
-import cl.duoc.dsy1103.categorias_microservice.client.LibroClient;
 import cl.duoc.dsy1103.categorias_microservice.dto.CategoriaRequest;
 import cl.duoc.dsy1103.categorias_microservice.dto.CategoriaResponse;
 import cl.duoc.dsy1103.categorias_microservice.dto.CategoriaUpdateRequest;
-import cl.duoc.dsy1103.categorias_microservice.dto.LibroResponse;
 import cl.duoc.dsy1103.categorias_microservice.mapper.CategoriaMapper;
 import cl.duoc.dsy1103.categorias_microservice.model.Categoria;
 import cl.duoc.dsy1103.categorias_microservice.repository.CategoriaRepository;
@@ -12,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 

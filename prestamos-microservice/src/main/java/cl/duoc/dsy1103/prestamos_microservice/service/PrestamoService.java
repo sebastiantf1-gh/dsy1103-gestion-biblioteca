@@ -65,12 +65,12 @@ public class PrestamoService {
 
         //validar usuario
         UsuarioResponse usuario = usuarioClient.buscarUsuarioPorId(request.getIdUsuario());
-        if (usuario == null) {
+        if (usuario == null || usuario.getNombreCompleto().contains("(Eliminado)")) {
             throw new NoSuchElementException("No se puede realizar el prestamo: El usuario no existe.");
         }
         //validar libro
         LibroResponse libro = libroClient.buscarLibroPorId(request.getIdLibro());
-        if (libro == null) {
+        if (libro == null|| libro.getTitulo().contains("(Eliminado)")) {
             throw new NoSuchElementException("No se puede realizar el prestamo: El libro no existe.");
         }
         // marcar libro como prestado (patch)

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
@@ -26,6 +27,11 @@ public class UsuarioClient {
                     .uri("/usuarios/{id}", idUsuario)
                     .retrieve()
                     .bodyToMono(UsuarioResponse.class)
+                    .onErrorResume(exception -> {
+                        log.warn("El usuario ID {} no existe o fue eliminado. Aplicando objeto de respaldo.", idUsuario);
+                        // Retornamos el DTO con el formato correcto (camelCase) y el mensaje de aviso
+                        return Mono.just(new UsuarioResponse(idUsuario, "Usuario no disponible (Eliminado)"));
+                    })
                     .block();
         } catch (WebClientResponseException ex) {
             log.error("Error al obtener usuario con ID: {}. Estado: {}", idUsuario, ex.getStatusCode());
