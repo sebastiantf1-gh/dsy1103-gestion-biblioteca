@@ -3,10 +3,7 @@ package cl.duoc.dsy1103.resennas_microservice.service;
 
 import cl.duoc.dsy1103.resennas_microservice.client.LibroClient;
 import cl.duoc.dsy1103.resennas_microservice.client.UsuarioClient;
-import cl.duoc.dsy1103.resennas_microservice.dto.LibroResponse;
-import cl.duoc.dsy1103.resennas_microservice.dto.ResennaRequest;
-import cl.duoc.dsy1103.resennas_microservice.dto.ResennaResponse;
-import cl.duoc.dsy1103.resennas_microservice.dto.ResennaUpdateRequest;
+import cl.duoc.dsy1103.resennas_microservice.dto.*;
 import cl.duoc.dsy1103.resennas_microservice.exception.ConflictException;
 import cl.duoc.dsy1103.resennas_microservice.mapper.ResennaMapper;
 import cl.duoc.dsy1103.resennas_microservice.model.Resenna;
@@ -43,6 +40,7 @@ public class ResennaService {
         usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
         libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
         LibroResponse libro = libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
+        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){
@@ -52,7 +50,7 @@ public class ResennaService {
         resenna.setFechaRegistro(LocalDateTime.now());
 
         Resenna resennaAGuardar = resennaRepository.save(resenna);
-        return resennaMapper.toResponse(resennaAGuardar, libro);
+        return resennaMapper.toResponse(resennaAGuardar, libro, usuario);
     }
 
     public ResennaResponse buscarResennaPorId(Long id){
