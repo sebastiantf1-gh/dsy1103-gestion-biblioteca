@@ -23,7 +23,7 @@ public class PrestamoMapper {
                 .fechaPrestamo(prestamo.getFechaPrestamo())
                 .fechaDevolucion(prestamo.getFechaDevolucion())
                 .usuario(usuario)
-                .response(libro)
+                .libro(libro)
                 .estado(prestamo.getEstado())
                 .build();
     }
