@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
 
@@ -20,21 +21,21 @@ public class LibroClient {
 
 
 
+
+
     public LibroResponse obtenerLibrosPorId(Long id){
         log.info("Verificando existencia del libro con ID: {}", id);
-        try{
-            return webClientLibros.get()
-                    .uri("/{id}",id)
-                    .retrieve()
-                    .bodyToMono(LibroResponse.class)
-                    .block();
-        }catch (WebClientResponseException ex){
-            log.error("Error al obtener informacion del libro con ID: {}", id);
-            if(ex.getStatusCode().value() == 404){
-                throw new NoSuchElementException("Libro no encontrado con ID: " + id);
-            }
-            throw  new RuntimeException("Error al conectar con servicio de libros");
-        }
-    }
+        return webClientLibros.get()
+                .uri("/{id}",id)
+                .retrieve()
+                .bodyToMono(LibroResponse.class)
+                .onErrorResume(ex->{
+                    log.error("Error al obtener el libro ID: {}", id);
+                    LibroResponse fallback = new LibroResponse();
+                    fallback.setTitulo("El libro no está disponible o fue eliminado");
+                    return Mono.just(fallback);
+                })
+                .block();
 
+    }
 }

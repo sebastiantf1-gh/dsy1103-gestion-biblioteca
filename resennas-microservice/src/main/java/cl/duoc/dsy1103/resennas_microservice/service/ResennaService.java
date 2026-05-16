@@ -40,6 +40,11 @@ public class ResennaService {
 
         LibroResponse libro = libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
         UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
+
+        if(libro.getTitulo().contains("no está disponible") || usuario.getNombreCompleto().contains("no está disponible")){
+            throw new NoSuchElementException("No se puede crear la reseña: El usuario o el libro especificado no existe.");
+        }
+
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){
@@ -52,18 +57,25 @@ public class ResennaService {
         return resennaMapper.toResponse(resennaAGuardar, libro, usuario);
     }
 
+
     public ResennaResponse buscarResennaPorId(Long id){
         log.info("buscando resenna por Id {}", id);
         Resenna resenna = resennaRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("Resenna no encontrada"));
-        return resennaMapper.toResponse(resenna);
+        LibroResponse libro = libroClient.obtenerLibrosPorId(resenna.getIdLibro());
+        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resenna.getIdUsuario());
+        return resennaMapper.toResponse(resenna, libro , usuario);
     }
 
     public List<ResennaResponse> listarResennas(){
         log.info("Listando resennas");
         List<Resenna> resennas = resennaRepository.findAll();
         return resennas.stream()
-                .map(resennaMapper::toResponse)
+                .map(resenna ->{
+                    LibroResponse libro = libroClient.obtenerLibrosPorId(resenna.getIdLibro());
+                    UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resenna.getIdUsuario());
+                    return resennaMapper.toResponse(resenna, libro , usuario);
+                })
                 .toList();
     }
     public ResennaResponse modificarResenna(Long id, ResennaUpdateRequest request){
@@ -79,7 +91,11 @@ public class ResennaService {
         }
 
         Resenna resennaModificada = resennaRepository.save(resenna);
-        return resennaMapper.toResponse(resennaModificada);
+
+        LibroResponse libro = libroClient.obtenerLibrosPorId(resennaModificada.getIdLibro());
+        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaModificada.getIdUsuario());
+
+        return resennaMapper.toResponse(resennaModificada, libro, usuario);
     }
 
     public void eliminarResenna(Long id){
