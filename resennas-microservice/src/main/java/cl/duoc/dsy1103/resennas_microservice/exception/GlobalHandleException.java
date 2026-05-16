@@ -62,7 +62,7 @@ public class GlobalHandleException {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.name())
-                .message(ex.getMessage())
+                .message("Error de validación en los campos de la petición")
                 .path(request.getRequestURI())
                 .errors(errors)
                 .build();
