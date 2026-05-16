@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ResennaResponse {
     private Long id;
+    private String tituloLibro;
     private String descripcion;
     private Integer calificacion;
     private LocalDateTime fechaRegistro;
