@@ -1,5 +1,6 @@
 package cl.duoc.multas_microservice.client;
 
+import cl.duoc.multas_microservice.dto.UsuarioResponse;
 import cl.duoc.multas_microservice.exception.ForbiddenException;
 import cl.duoc.multas_microservice.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
