@@ -5,8 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
+//Con el JpaRepository ya tenemos los metodos CRUD listos
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-
-    Usuario findAllById(Long id);
 }
