@@ -17,6 +17,8 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalHandlerException {
+
+    //Maneja errores de la base de datos
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex,
@@ -32,7 +34,7 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
 
     }
-
+    //Maneja el error de cuando no se encuentra un registro en el Service(Not Found - 404)
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNoSuchElementException(NoSuchElementException ex,
                                                                          HttpServletRequest request) {
@@ -80,6 +82,7 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
+    // Captura la excepción de negocio cuando se intenta registrar un nombre de genero que ya se encuentra registrado
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ApiErrorResponse> handleConflictException(
             ConflictException ex,

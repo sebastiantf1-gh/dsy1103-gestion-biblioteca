@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneroMapper {
 
+    //Transforma los datos que llegan en una entidad para la base de datos
     public Genero fromRequest(GeneroRequest generoRequest){
         return Genero.builder()
                 .nombreGenero(generoRequest.getNombreGenero())
@@ -17,6 +18,7 @@ public class GeneroMapper {
                 .build();
     }
 
+    //Convierte la entidad en un response para mostrar los datos necesarios
     public GeneroResponse toResponse(Genero genero){
         return GeneroResponse.builder()
                 .id(genero.getId())

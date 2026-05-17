@@ -50,7 +50,7 @@ public class GeneroService {
         log.info("modificando Genero id: {}", id);
         Genero genero = generoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("genero no encontrado :" + id));
-
+        // Actualizaciones parciales para que el cliente modifique solo los campos enviados
         if(request.getNombreGenero()!=null){
             genero.setNombreGenero(request.getNombreGenero());
         }
@@ -73,11 +73,5 @@ public class GeneroService {
 
 
 /*
-    crear o agregar ✔
-    listar✔
-    buscar por id✔
-    actualizar✔
-    eliminar(se podria agregar no se puede eliminar si tiene libros
-    asociados)
-  */
+
 }

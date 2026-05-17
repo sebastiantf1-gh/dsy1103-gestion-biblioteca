@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filter)
         throws ServletException, IOException{
 
-        //saca el header de Authorization de la peticio Http
+        //saca el header de Authorization de la peticion Http
         String authHeader = request.getHeader("Authorization");
 
         //si no hay header o no parte con "Bearer ", deja pasar la peticion
