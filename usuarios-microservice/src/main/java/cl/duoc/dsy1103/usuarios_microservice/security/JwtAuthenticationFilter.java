@@ -28,19 +28,26 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filter)
         throws ServletException, IOException{
 
+        //saca el header de Authorization de la peticio Http
         String authHeader = request.getHeader("Authorization");
 
+        //si no hay header o no parte con "Bearer ", deja pasar la peticion
         if(authHeader==null || !authHeader.startsWith("Bearer ")){
             filter.doFilter(request, response);
             return;
         }
 
+        //corta el texto "Bearer " que son 7 caracteres, para quedarse solo con el token
         String token = authHeader.substring(7);
 
+        //Si es que el JwtService valida el token, saca los datos y da el permiso
         if(jwtService.isTokenValid(token)){
             Claims claims = jwtService.extractClaims(token);
+
+            //Le asigne el "ROLE_USER" para pasar la seguridad de Spring
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     claims.getSubject(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+            //Guarda el usuario autenticado
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Token valido para usuarios: {}",claims.getSubject());
         }else {

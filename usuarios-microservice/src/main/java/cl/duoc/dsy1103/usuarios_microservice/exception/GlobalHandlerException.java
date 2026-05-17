@@ -14,10 +14,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RestControllerAdvice
+@RestControllerAdvice //anotacion para interceptar todas las excepciones
 @Slf4j
 public class GlobalHandlerException {
 
+    //Maneja errores de la base de datos como problemas con las llaves foraneas(Conflict -409)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(
             DataIntegrityViolationException ex,
@@ -34,6 +35,7 @@ public class GlobalHandlerException {
 
     }
 
+    //Maneja el error de cuando no se encuentra un registro en el Service(Not Found - 404)
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNoSuchElementException(NoSuchElementException ex,
                                                                          HttpServletRequest request) {
@@ -47,12 +49,14 @@ public class GlobalHandlerException {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
-
+    //Maneja cuando saltan las validacion hechas en el request @Notblank @NotNull (Bad Request -400)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
         log.error("Error de validacion: {}", ex.getMessage());
+
+        //Recorre todos los campos que dieron el error y crea una lista con los errores especifios
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .toList();
@@ -66,7 +70,7 @@ public class GlobalHandlerException {
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-
+    //Captura cualquier error no capturado por los anteriores para que no se caiga el microservicio (Internal Server Error -500)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex,
                                                                    HttpServletRequest request) {

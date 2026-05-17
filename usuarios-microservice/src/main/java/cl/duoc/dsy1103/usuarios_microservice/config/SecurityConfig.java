@@ -9,14 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
-@EnableWebSecurity
+@Configuration //con esta anotacion le decimos a Sring que esta clase tiene beans
+@EnableWebSecurity //activamos el soporte de seguridad web de Spring
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
                 .csrf(csrf -> csrf.disable())
+                // Configuramos la politica de sesiones como STATELESS (sin estado) porque los microservicios no guardan sesiones en el servidor
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
                 /*se comenta lo siguiente para desactivar seguridad

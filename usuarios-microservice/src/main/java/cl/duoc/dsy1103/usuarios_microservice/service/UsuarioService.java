@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional
+@Transactional//Si falla algo en la base de datos se hace un rollback
 @Slf4j
 public class UsuarioService {
 
@@ -26,6 +26,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
+    //Trae todos los usuario de la base de datos y los pasa a response
     public List<UsuarioResponse> listarUsuarios(){
         log.info("listando usuarios");
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -34,26 +35,29 @@ public class UsuarioService {
                 .toList();
 
     }
-
+    //Busca a un usuario por la ID. Si no existe manda un error para ser capturado por el GlobalException
     public UsuarioResponse buscarUsuarioPorId(Long id){
         log.info("buscando usuario por ID: {}", id);
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         return usuarioMapper.toResponse(usuario);
     }
+    //Crea el usuario usando los datos mandados por el cliente y el mapper los transforma a response
     public UsuarioResponse crearUsuario(UsuarioRequest usuarioRequest){
         log.info("creando nuevo usuario");
         Usuario usuario = usuarioMapper.fromRequest(usuarioRequest);
+        //setea la fecha de ingreso automaticamente
         usuario.setFechaRegistro(LocalDateTime.now());
         Usuario usuario1 = usuarioRepository.save(usuario);
         return usuarioMapper.toResponse(usuario1);
     }
-
+    //Modifica los campos que no vengan nulos
     public UsuarioResponse modificarUsuario(Long id, UsuarioUpdateRequest request){
         log.info("modificando usuario id: {}", id);
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("usuario no encontrado :" + id));
 
+        //validaciones por si el campo viene vacio
         if(request.getNombreCompleto()!=null){
             usuario.setNombreCompleto(request.getNombreCompleto());
         }
@@ -68,6 +72,7 @@ public class UsuarioService {
         return usuarioMapper.toResponse(usuarioModificado);
     }
 
+    //Verifica la existencia del id antes de borrar, si no existe tira un error
     public void eliminarUsuario(Long id){
         log.info("Eliminando usuario id: {}", id);
         if(!usuarioRepository.existsById(id)){

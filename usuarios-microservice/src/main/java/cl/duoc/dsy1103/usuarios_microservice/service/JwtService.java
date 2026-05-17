@@ -13,13 +13,17 @@ import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 public class JwtService {
+
+    //Inteccion de la llave secreta
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    //Genera la clave de firma
     private SecretKey getSigningKey(){
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
+    //metodo para extrar el token y sus datos
     public Claims extractClaims(String token){
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -28,6 +32,7 @@ public class JwtService {
                 .getPayload();
     }
 
+    //validacion del token
     public boolean isTokenValid(String token){
         try{
             extractClaims(token);
