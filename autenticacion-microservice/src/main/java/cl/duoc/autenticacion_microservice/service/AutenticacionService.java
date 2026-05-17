@@ -1,6 +1,7 @@
 package cl.duoc.autenticacion_microservice.service;
 
 import cl.duoc.autenticacion_microservice.dto.AutenticacionResponse;
+import cl.duoc.autenticacion_microservice.dto.CrearUsuarioRequest;
 import cl.duoc.autenticacion_microservice.dto.LoginRequest;
 import cl.duoc.autenticacion_microservice.model.UsuarioPersonal;
 import cl.duoc.autenticacion_microservice.repository.UsuarioPersonalRepository;
@@ -46,5 +47,26 @@ public class AutenticacionService {
                 .nombreUsuario(usuario.getNombreUsuario())
                 .expiresIn(jwtExpiration)
                 .build();
+    }
+    public String registrarUsuario(CrearUsuarioRequest request) {
+        // 1. Validar si el email o nombre ya existen para evitar duplicados
+        if (usuarioRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("El email ya está registrado");
+        }
+
+        // 2. Crear la entidad y mapear los datos del DTO
+        UsuarioPersonal nuevoUsuario = new UsuarioPersonal();
+        nuevoUsuario.setNombreUsuario(request.getNombreUsuario());
+        nuevoUsuario.setEmail(request.getEmail());
+        nuevoUsuario.setNumeroTelefono(request.getNumeroTelefono());
+
+        // 3. ¡LA CLAVE! Encriptar la contraseña usando el BCrypt del proyecto
+        String passwordEncriptada = passwordEncoder.encode(request.getPassword());
+        nuevoUsuario.setPassword(passwordEncriptada);
+
+        // 4. Guardar en la base de datos
+        usuarioRepository.save(nuevoUsuario);
+
+        return "Usuario registrado exitosamente";
     }
 }

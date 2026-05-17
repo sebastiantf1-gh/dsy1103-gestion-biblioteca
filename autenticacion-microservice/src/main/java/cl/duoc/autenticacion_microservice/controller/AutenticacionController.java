@@ -1,6 +1,7 @@
 package cl.duoc.autenticacion_microservice.controller;
 
 import cl.duoc.autenticacion_microservice.dto.AutenticacionResponse;
+import cl.duoc.autenticacion_microservice.dto.CrearUsuarioRequest;
 import cl.duoc.autenticacion_microservice.dto.LoginRequest;
 import cl.duoc.autenticacion_microservice.service.AutenticacionService;
 import jakarta.validation.Valid;
@@ -23,5 +24,10 @@ public class AutenticacionController {
     public ResponseEntity<AutenticacionResponse> login(@Valid @RequestBody LoginRequest request) {
         AutenticacionResponse response = autenticacionService.login(request);
         return ResponseEntity.ok(response);
+    }
+    @PostMapping("/register")
+    public ResponseEntity<String> registrar(@Valid @RequestBody CrearUsuarioRequest request) {
+        String respuesta = autenticacionService.registrarUsuario(request);
+        return ResponseEntity.ok(respuesta);
     }
 }
