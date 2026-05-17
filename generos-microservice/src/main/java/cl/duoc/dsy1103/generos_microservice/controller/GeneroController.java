@@ -29,6 +29,7 @@ public class GeneroController {
     public ResponseEntity<GeneroResponse> agregarGenero(@Valid @RequestBody GeneroRequest generoRequest){
         log.info("Post /generos");
         GeneroResponse generoAgregado = generoService.agregarGenero(generoRequest);
+        // Construccion de la URL del nuevo genero
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

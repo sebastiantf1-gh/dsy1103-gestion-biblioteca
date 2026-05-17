@@ -23,7 +23,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    //metodo para extrar el token y sus datos
+    //metodo para extraer el token y sus datos
     public Claims extractClaims(String token){
         return Jwts.parser()
                 .verifyWith(getSigningKey())
