@@ -45,6 +45,7 @@ public class ResennaService {
             throw new NoSuchElementException("No se puede crear la reseña: El usuario o el libro especificado no existe.");
         }
 
+        //Controla que un mismo usuario no pueda escribir resennas sobre el mismo libro
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){
@@ -72,12 +73,15 @@ public class ResennaService {
         List<Resenna> resennas = resennaRepository.findAll();
         return resennas.stream()
                 .map(resenna ->{
+                    //se le pide datos a los otros microservicios para armar una respuesta completa
                     LibroResponse libro = libroClient.obtenerLibrosPorId(resenna.getIdLibro());
                     UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resenna.getIdUsuario());
                     return resennaMapper.toResponse(resenna, libro , usuario);
                 })
                 .toList();
     }
+
+    //Use un UpdateRequest para modificar solo lo necesario
     public ResennaResponse modificarResenna(Long id, ResennaUpdateRequest request){
         log.info("modificando resenna: {}", id);
         Resenna resenna = resennaRepository.findById(id)

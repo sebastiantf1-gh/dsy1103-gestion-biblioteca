@@ -72,7 +72,7 @@ public class GlobalHandleException {
 
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiErrorResponse> handConflictException(
+    public ResponseEntity<ApiErrorResponse> handleConflictException(
             ConflictException ex,
             HttpServletRequest request){
         log.error("Ya existe esta resenna");

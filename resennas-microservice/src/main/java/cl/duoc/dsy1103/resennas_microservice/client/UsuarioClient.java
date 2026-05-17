@@ -31,6 +31,7 @@ public class UsuarioClient {
                 .uri("/{id}", id)
                 .retrieve()
                 .bodyToMono(UsuarioResponse.class)
+                // uso del fallback Si el microservicio externo falla, evita la caida del sistema devolviendo un objeto
                 .onErrorResume(ex -> {
                     log.error("Error al obtener usuario ID: {}", id);
                     UsuarioResponse fallback = new UsuarioResponse();

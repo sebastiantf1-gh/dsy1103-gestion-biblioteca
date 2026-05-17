@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class JwtService {
 
-    //Inteccion de la llave secreta
+    //Inyeccion de la llave secreta
     @Value("${jwt.secret}")
     private String jwtSecret;
 

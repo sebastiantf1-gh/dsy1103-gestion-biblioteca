@@ -29,6 +29,7 @@ public class LibroClient {
                 .uri("/{id}",id)
                 .retrieve()
                 .bodyToMono(LibroResponse.class)
+                // uso del fallback Si el microservicio externo falla, evita la caida del sistema devolviendo un objeto
                 .onErrorResume(ex->{
                     log.error("Error al obtener el libro ID: {}", id);
                     LibroResponse fallback = new LibroResponse();
