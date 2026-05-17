@@ -24,7 +24,7 @@ public class UsuarioPersonal {
     @Column(name = "email", unique = true, nullable = false, length = 150)
     private String email;
 
-    @Column(name = "telefono", length = 20)
+    @Column(name = "numero_telefono", length = 20)
     private String numeroTelefono;
 
     @Column(name = "fecha_registro",nullable = false, updatable = false)
