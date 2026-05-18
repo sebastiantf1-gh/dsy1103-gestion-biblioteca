@@ -25,7 +25,7 @@ public class UsuarioClient {
         log.info("Enviando petición remota a Usuarios para ID: {}", id);
         try {
             return webClient.get()
-                    .uri(baseUrl + "/id/{id}", id)
+                    .uri(baseUrl + "/{id}", id)
                     .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(UsuarioResponse.class)

@@ -61,7 +61,7 @@ public class ReservaService {
         UsuarioResponse usuarioResponse;
         try {
             usuarioResponse = usuarioClient.obtenerUsuarioPorId(request.getIdUsuario(), token);
-            log.info("Usuario verificado de forma remota ID: {}", usuarioResponse.getIdUsuario());
+            log.info("Usuario verificado de forma remota ID: {}", usuarioResponse.getId());
         } catch (NoSuchElementException e) {
             log.warn("Validación remota fallida: El usuario ID {} no existe.", request.getIdUsuario());
             throw new NoSuchElementException("No se puede generar la reserva. El usuario no existe.");
@@ -71,7 +71,7 @@ public class ReservaService {
         LibroResponse libroResponse;
         try {
             libroResponse = libroClient.obtenerLibroPorId(request.getIdLibro(), token);
-            log.info("Libro verificado de forma remota ID: {}", libroResponse.getIdLibro());
+            log.info("Libro verificado de forma remota ID: {}", libroResponse.getId());
         } catch (NoSuchElementException e) {
             log.warn("Validación remota fallida: El libro ID {} no existe.", request.getIdLibro());
             throw new NoSuchElementException("No se puede generar la reserva. El libro seleccionado no existe.");

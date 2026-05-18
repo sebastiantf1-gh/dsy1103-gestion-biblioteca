@@ -25,7 +25,7 @@ public class LibroClient {
         log.info("Enviando petición remota a Libros para ID: {}", id);
         try {
             return webClient.get()
-                    .uri(baseUrl + "/{id}", id) // Ajusta la ruta según la API de tu microservicio de Libros
+                    .uri(baseUrl + "/{id}", id)
                     .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(LibroResponse.class)

@@ -1,5 +1,6 @@
 package cl.duoc.multas_microservice.client;
 
+import cl.duoc.multas_microservice.dto.PrestamoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class PrestamoClient {
     @Autowired
-    private WebClient webClientPrestamos; // Asegúrate de tener este bean configurado
+    private WebClient webClientPrestamos;
 
     @Value("${services.prestamos.baseUrl}")
     private String baseUrl;

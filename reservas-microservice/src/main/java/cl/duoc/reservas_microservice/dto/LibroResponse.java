@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LibroResponse {
-    private Long idLibro;
+    private Long id;
     private Boolean disponible;
 }

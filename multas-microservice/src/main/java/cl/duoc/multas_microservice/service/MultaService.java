@@ -4,6 +4,8 @@ import cl.duoc.multas_microservice.client.PrestamoClient;
 import cl.duoc.multas_microservice.client.UsuarioClient;
 import cl.duoc.multas_microservice.dto.MultaRequest;
 import cl.duoc.multas_microservice.dto.MultaResponse;
+import cl.duoc.multas_microservice.dto.PrestamoResponse;
+import cl.duoc.multas_microservice.dto.UsuarioResponse;
 import cl.duoc.multas_microservice.mapper.MultaMapper;
 import cl.duoc.multas_microservice.model.Multa;
 import cl.duoc.multas_microservice.repository.MultaRepository;
