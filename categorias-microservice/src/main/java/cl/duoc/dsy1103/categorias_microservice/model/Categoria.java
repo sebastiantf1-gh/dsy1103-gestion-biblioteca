@@ -13,8 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Categoria {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     // Establece la estrategia IDENTITY. Delega por completo el control del autoincremento al motor SQL, impidiendo
+    // colisiones de identificadores y garantizando la consistencia en inserciones concurrentes .
     private Long id;
 
     @Column(nullable = false, length = 90)

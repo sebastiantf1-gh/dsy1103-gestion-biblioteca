@@ -14,9 +14,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController
-@RequestMapping("/autores")
-@Slf4j
+@RestController //Combina @Controller y @ResponseBody. Indica a Spring que esta clase procesará peticiones REST y que
+                // todos los retornos de los métodos serán convertidos de forma automática a formato JSON en el
+                // cuerpo de la respuesta HTTP.
+@RequestMapping("/autores") // Establece la ruta base semántica a nivel de clase, centralizando la raíz del recurso bajo las mejores prácticas REST
+@Slf4j // Inyecta el Logger de SLF4J para mantener la trazabilidad de los verbos HTTP y endpoints consumidos a nivel de consola.
 public class AutorController {
 
     @Autowired
@@ -26,6 +28,8 @@ public class AutorController {
     @GetMapping
     public ResponseEntity<List<AutorResponse>> buscarAutores(){
     log.info("GET /autores");
+        // Retorna un código HTTP 200 OK de forma explícita encapsulado a través de ResponseEntity.
+        // El controlador no manipula datos, solo delega al servicio y despacha el JSON resultante.
     return ResponseEntity.ok(autorService.buscarAutores());
     }
 
@@ -38,9 +42,14 @@ public class AutorController {
 
     //Crear autor
     @PostMapping
-    public ResponseEntity<AutorResponse> crearAutor(@Valid @RequestBody AutorRequest autor){//@Valid para validar anotaciones del dto
+    public ResponseEntity<AutorResponse> crearAutor(@Valid @RequestBody AutorRequest autor){
         log.info("POST /autores");
+        //Integración del Bean Validation. La anotación '@Valid' intercepta el request
+        //y dispara las reglas del DTO (como @NotBlank) antes de entrar al cuerpo del método. Si falla, corta la petición de inmediato.
         AutorResponse crearAutor = autorService.crearAutor(autor);
+        //Mediante 'ServletUriComponentsBuilder', se genera de forma
+        // dinámica la URI del nuevo recurso creado (ej: http://localhost:8084/api/autores/5) y se inyecta en la cabecera 'Location'
+        // de la respuesta de red, retornando un estado 201 Created.
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -53,6 +62,8 @@ public class AutorController {
     @PutMapping("/{id}")
     public ResponseEntity<AutorResponse> actualizarAutor(@PathVariable Long id, @Valid @RequestBody AutorUpdateRequest autor){
         log.info("PUT /autores/{}", id);
+        // Mapea semánticamente la actualización de recursos mediante PUT. Se inyecta '@Valid'
+        // para garantizar que la nueva información opcional respete las restricciones básicas de extensión y semántica.
         return ResponseEntity.ok(autorService.actualizarAutor(id, autor));
     }
 
@@ -61,6 +72,8 @@ public class AutorController {
     public ResponseEntity<Void> eliminarAutor(@PathVariable Long id){
         log.info("DELETE /autores/{}", id);
         autorService.eliminarAutor(id);
+        // Se utiliza '.noContent().build()' para despachar un estado HTTP 204 No Content explícito hacia el cliente,
+        // notificando que la acción se completó con éxito en la persistencia real pero que no existe una respuesta JSON de retorno.
         return ResponseEntity.noContent().build(); // si no hay body, con .build() se cierra configuracion y se envía vacío.
     }
 

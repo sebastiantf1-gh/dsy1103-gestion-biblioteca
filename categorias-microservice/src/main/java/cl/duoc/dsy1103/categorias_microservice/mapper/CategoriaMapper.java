@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Component //Registra la clase como un Bean de mapeo. Esto permite inyectarlo limpiamente mediante @Autowired en el CategoriaService,
+            // centralizando la responsabilidad de conversión estructural.
 public class CategoriaMapper {
     public Categoria toEntity(CategoriaRequest request){
         return Categoria.builder()

@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class) //"escuchar" eventos de auditoria (@CreatedDate)
-@Table(name = "autores")
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@EntityListeners(AuditingEntityListener.class)  // Habilita el oyente de auditoría de Spring Data JPA. Es indispensable
+                                                // para interceptar la entidad antes de la persistencia y rellenar
+                                                //campos automáticos como @CreatedDate.
+@Table(name = "autores") // Define el nombre explícito de la tabla en la base de datos.
+@AllArgsConstructor // Genera un constructor con todos los campos disponibles (requerido por el patrón Builder).
+@NoArgsConstructor // Genera un constructor vacío obligatorio para que Hibernate pueda instanciar la entidad mediante reflexión.
+@Builder // Implementa el patrón de diseño creacional Builder, facilitando las transformaciones de datos en la capa Mapper.
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,7 @@ public class Autor {
     private LocalDate fechaNacimiento;
 
     @Column(name = "fecha_registro", nullable = false, updatable = false)
-    @CreatedDate //auditoria para automatizar fecha de registro
+    @CreatedDate //'@CreatedDate' automatiza la captura del timestamp de registro. Combinado con 'updatable = false',
+                // se blinda el campo para que cambios posteriores (como actualizaciones) no alteren la fecha original.
     private LocalDateTime fechaRegistro;
 }

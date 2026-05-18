@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Service
-@Slf4j
+@Service// Declara esta clase como un Bean de Servicio de Spring.
+@Slf4j //Inyecta automáticamente una instancia estática de la fachada de logging SLF4J (Simple Logging Facade for Java)
+// bajo la variable 'log', permitiendo auditorías de ejecución en tiempo real en la consola del servidor.
 public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;

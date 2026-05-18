@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Component //Registra esta clase como un Bean gestionado por el contenedor de inversión de control de Spring.
+           //Permite que el Mapper sea inyectado limpiamente mediante @Autowired dentro del AutorService,
+          //centralizando la responsabilidad de conversión.
 public class AutorMapper {
     public Autor toEntity(AutorRequest request){
         return Autor.builder()

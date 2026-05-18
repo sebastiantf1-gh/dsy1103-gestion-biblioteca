@@ -164,7 +164,7 @@ public class LibroService {
         }
         libroRepository.deleteById(id);
     }
-
+    // Aplica la regla de negocio para efectuar la transición de estado al arrendar o prestar un libro.
     //marcar libro como prestado (no disponible - false)
     public LibroResponse prestarLibro(Long id){
         log.info("Prestando libro con ID: {}", id);
@@ -182,6 +182,7 @@ public class LibroService {
         return libroMapper.toResponse(libroActualizado, autor, categoria, genero);
     }
 
+    //Aplica la regla de negocio para procesar el retorno físico de un libro arrendado al inventario de la biblioteca.
     //marcar libro como disponible - true
     public LibroResponse devolverLibro(Long id){
         log.info("Devolviendo libro con ID: {}",id);

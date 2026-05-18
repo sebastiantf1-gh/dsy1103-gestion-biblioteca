@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+@Repository //Registra esta interfaz como un componente de persistencia.
 public interface CategoriaRepository extends JpaRepository<Categoria,Long> {
 }

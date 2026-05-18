@@ -23,6 +23,9 @@ public class AutorClient {
                     .uri("/autores/{idAutor}", idAutor)
                     .retrieve()
                     .bodyToMono(AutorResponse.class)
+            // Si el microservicio de Autores está caído, experimenta latencia extrema o responde con errores de servidor (5xx),
+            // '.onErrorResume()' intercepta la falla y activa un objeto de respaldo.
+            // Esto evita el colapso del catálogo de libros devolviendo un nombre genérico transitorio en vez de arrojar un error HTTP 500 al cliente.
                     .onErrorResume(exception -> {
                         log.warn("No se pudo obtener el autor ID {}. Activando objeto de respaldo.", idAutor);
                         return Mono.just(new AutorResponse(idAutor, "Autor no disponible (Eliminado)"));

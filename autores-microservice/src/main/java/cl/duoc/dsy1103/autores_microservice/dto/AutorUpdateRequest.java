@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @Builder
 public class AutorUpdateRequest {
     @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres.")
+    //Se omiten intencionalmente las anotaciones @NotBlank o @NotNull. Esto permite que el cliente actualice solo
+    // ciertos campos (por ejemplo, solo la biografía) sin verse obligado a reenviar el nombre completo u otros campos.
     private String nombreCompleto;
 
     private String biografia;
