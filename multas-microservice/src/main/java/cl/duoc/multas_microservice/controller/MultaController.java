@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/multas")
+@RequestMapping("/v1/multas")
 @Slf4j
 public class MultaController {
     @Autowired
