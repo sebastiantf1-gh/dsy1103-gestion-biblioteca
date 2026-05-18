@@ -46,7 +46,7 @@ prestamos-microservice
 multas-microservice
     → llama a usuarios-microservice  (verificar que el usuario existe)
     → llama a prestamos-microservice (verificar que el préstamo existe)
-```
+
 reservas-microservice
      → llama a usuarios-microservice  (verificar que el usuario existe)
      → llama a libros-microservice    (verificar disponibilidad del libro)
@@ -206,7 +206,21 @@ POST   /api/prestamos                     → crear nuevo préstamo
 ---
 
 ### 10. reservas-microservice — Puerto 8090
+Gestiona las reservas de libros realizadas por los usuarios. Permite reservar un libro y consultar el historial de reservas.
+**Base de datos:** `db_reservas`
 
+**Endpoints:**
+```
+GET    /api/v1/reservas                        → listar todas las reservas
+GET    /api/v1/reservas/usuario/{idUsuario}    → reservas de un usuario
+POST   /api/v1/reservas                        → crear nueva reserva
+DELETE /api/v1/reservas/{id}                   → eliminar reserva por id
+DELETE /api/v1/reservas/usuario/{idUsuario}    → eliminar todas las reservas de un usuario
+
+```
+**Reglas de negocio:**
+- Verifica que el usuario existe antes de crear la reserva
+- Verifica que el libro existe antes de crear la reserva
 ## Tecnologías Utilizadas
 
 ```
