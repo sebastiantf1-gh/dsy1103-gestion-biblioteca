@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
+@Service
 public class JwtService {
     // Extrae la clave secreta desde el archivo application.properties
     @Value("${jwt.secret}")

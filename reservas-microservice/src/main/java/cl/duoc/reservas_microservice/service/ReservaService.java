@@ -105,7 +105,7 @@ public class ReservaService {
         // 6. Mapear y guardar la reserva en la base de datos
         Reserva reserva = reservaMapper.toEntity(request);
         Reserva savedReserva = reservaRepository.save(reserva);
-        log.info("Reserva guardada con éxito en la base de datos. Asignado ID: {}", savedReserva.getIdReserva());
+        log.info("Reserva guardada con éxito en la base de datos. Asignado ID: {}", savedReserva.getId());
 
         // 7. Convertir el resultado a Response y devolverlo
         return reservaMapper.toResponse(savedReserva);

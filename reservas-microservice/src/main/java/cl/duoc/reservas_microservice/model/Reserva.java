@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idReserva;
+    private Long id;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fechaInicio;
