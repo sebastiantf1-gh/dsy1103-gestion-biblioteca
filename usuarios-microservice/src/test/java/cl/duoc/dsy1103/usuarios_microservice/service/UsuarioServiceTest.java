@@ -1,4 +1,4 @@
-package cl.duoc.dsy1103.usuarios_microservice;
+package cl.duoc.dsy1103.usuarios_microservice.service;
 
 
 import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioRequest;
@@ -7,7 +7,6 @@ import cl.duoc.dsy1103.usuarios_microservice.dto.UsuarioUpdateRequest;
 import cl.duoc.dsy1103.usuarios_microservice.mapper.UsuarioMapper;
 import cl.duoc.dsy1103.usuarios_microservice.model.Usuario;
 import cl.duoc.dsy1103.usuarios_microservice.repository.UsuarioRepository;
-import cl.duoc.dsy1103.usuarios_microservice.service.UsuarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
