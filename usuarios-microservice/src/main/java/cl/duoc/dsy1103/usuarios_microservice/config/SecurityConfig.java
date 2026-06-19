@@ -29,7 +29,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permite que cualquiera pueda registrarse
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll().anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
