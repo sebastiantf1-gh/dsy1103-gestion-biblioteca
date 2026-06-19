@@ -2,52 +2,47 @@ spring:
   application:
     name: usuarios-microservice
 
-    # Database configuration
-    datasource:
-      url: jdbc:mysql://localhost:3306/db_usuarios
-      username: root
-      password: ""
-      driver-class-name: com.mysql.cj.jdbc.Driver
+  # Database configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_usuarios
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-    #Flyway configuration
-    flyway:
-      enabled: true
-      locations: classpath:db/migration
-      baseline-on-migrate: true
+  # Flyway configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
-    #JPA configuration
-    jpa:
-      hibernate:
-        ddl-auto: validate
-      show-sql: false
-      open-in-view: false
+  # JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
 
-    #Server configuration
-    server:
-      port: 8081
-      servlet:
-        context-path: /api
+# Server configuration
+server:
+  port: 8081
+  servlet:
+    context-path: /api
 
-    #Logging configuration
-    loggin:
-      level:
-        org.springframework: INFO
-        cl.duoc.dsy1103.usuarios_microservice: DEBUG
-      file:
-        name: logs/users-service.log
+# Logging configuration
+logging:
+  level:
+    org.springframework: INFO
+    cl.duoc.dsy1103.usuarios_microservice: DEBUG
+  file:
+    name: logs/users-service.log
 
-    #JWT configuration
-    jwt:
-      secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
+# JWT configuration
+jwt:
+  secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
 
-    #Swagger
-    springdoc:
-      api-docs:
-        enabled: true
-      swagger-ui:
-        enabled: true
-
-
-
-
-
+# Swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
