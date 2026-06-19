@@ -36,10 +36,8 @@ public class MultaService {
         log.info("Creando nueva multa para el Usuario ID: {} asociado al Préstamo ID: {}",
                 multaRequest.getIdUsuario(), multaRequest.getIdPrestamo());
         //Validar existencia del usuario en el microservicio de usuarios
-        UsuarioResponse usuarioResponse = usuarioClient.obtenerUsuarioPorId(multaRequest.getIdUsuario(), token);
-
-        //Validar existencia del préstamo en el microservicio de préstamos
-        PrestamoResponse prestamoResponse = prestamoClient.obtenerPrestamoPorId(multaRequest.getIdPrestamo(), token);
+        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(multaRequest.getIdUsuario());
+        PrestamoResponse prestamo = prestamoClient.obtenerPrestamoPorId(multaRequest.getIdPrestamo());
 
         //Mapear el request a la entidad Multa
         Multa multa = multaMapper.toEntity(multaRequest);

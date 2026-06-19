@@ -38,8 +38,8 @@ public class ResennaService {
     public ResennaResponse crearResenna(ResennaRequest resennaRequest){
         log.info("creando resenna");
 
-        LibroResponse libro = libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro());
-        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario());
+        UsuarioResponse usuario = usuarioClient.obtenerUsuarioPorId(resennaRequest.getIdUsuario()); // Sin token manual
+        LibroResponse libro = libroClient.obtenerLibrosPorId(resennaRequest.getIdLibro()); // Sin token manual
 
         if(libro.getTitulo().contains("no está disponible") || usuario.getNombreCompleto().contains("no está disponible")){
             throw new NoSuchElementException("No se puede crear la reseña: El usuario o el libro especificado no existe.");
@@ -49,7 +49,7 @@ public class ResennaService {
         if(resennaRepository.existsByIdUsuarioAndIdLibro(
                 resennaRequest.getIdUsuario(),
                 resennaRequest.getIdLibro())){
-                    throw new ConflictException("El usuario ya hizo una reseña para este libro");
+            throw new ConflictException("El usuario ya hizo una reseña para este libro");
         }
         Resenna resenna = resennaMapper.fromRequest(resennaRequest);
         resenna.setFechaRegistro(LocalDateTime.now());

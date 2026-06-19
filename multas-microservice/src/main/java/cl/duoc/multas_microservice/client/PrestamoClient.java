@@ -3,6 +3,7 @@ package cl.duoc.multas_microservice.client;
 import cl.duoc.multas_microservice.dto.PrestamoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,18 +14,17 @@ import java.util.NoSuchElementException;
 @Component
 @Slf4j
 public class PrestamoClient {
+
     @Autowired
+    @Qualifier("prestamosWebClient") // <-- Vincula con el WebClient del puerto 8089
     private WebClient webClientPrestamos;
 
-    @Value("${services.prestamos.baseUrl}")
-    private String baseUrl;
-
-    public PrestamoResponse obtenerPrestamoPorId(Long id, String token){
+    // Eliminamos el String token de la firma del metodo
+    public PrestamoResponse obtenerPrestamoPorId(Long id){
         log.info("Verificando existencia del préstamo con ID: {}", id);
         try {
             return webClientPrestamos.get()
-                    .uri("/{id}", id)
-                    .header("Authorization", token)
+                    .uri("/{id}", id) // La URL base ya contiene la ruta completa
                     .retrieve()
                     .bodyToMono(PrestamoResponse.class)
                     .block();
