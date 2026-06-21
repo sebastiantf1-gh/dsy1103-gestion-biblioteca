@@ -1,0 +1,87 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql_biblioteca
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_usuarios
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - biblioteca-net
+
+  usuarios-microservice:
+    build:
+      context: ./usuarios-microservice
+      dockerfile: Dockerfile
+    container_name: usuarios-microservice
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_usuarios
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  generos-microservice:
+    build:
+      context: ./generos-microservice
+      dockerfile: Dockerfile
+    container_name: generos-microservice
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_generos
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  resennas-microservice:
+    build:
+      context: ./resennas-microservice
+      dockerfile: Dockerfile
+    container_name: resennas-microservice
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_resennas
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+volumes:
+  mysql_data:
+
+networks:
+  biblioteca-net:
+    driver: bridge
