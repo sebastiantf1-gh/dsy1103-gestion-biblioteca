@@ -47,3 +47,9 @@ springdoc:
   swagger-ui:
     enabled: true
 
+# Comunicación entre microservicios
+services:
+  usuarios:
+    baseUrl: http://localhost:8081/api
+  libros:
+    baseUrl: http://localhost:8085/api
