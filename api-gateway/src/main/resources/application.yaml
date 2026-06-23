@@ -35,5 +35,27 @@ spring:
               filters:
                 - AddResponseHeader=X-Gateway-Processed, True
 
+            - id: resennas-microservice
+              uri: ${RESENNAS_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/api/resennas/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+            - id: usuarios-microservice
+              uri: ${USUARIOS_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/api/usuarios/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+            - id: generos-microservice
+              uri: ${GENEROS_SERVICE_URL:http://localhost:8083}
+              predicates:
+                - Path=/api/generos/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+
 server:
   port: 8080
