@@ -34,7 +34,12 @@ public class SecurityConfig {
                 //Postura de seguridad restrictiva estándar (Principio de Menor Privilegio). '.anyRequest().authenticated()'
                 // establece que absolutamente todos los endpoints expuestos en este microservicio requieren autenticación
                 // previa para denegar accesos anónimos por defecto.
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/doc/swagger-ui.html",
+                                "/doc/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll().anyRequest().authenticated())
                 //Integración del Filtro Personalizado. Inyecta nuestro 'jwtAuthFilter' justo ANTES del filtro estándar
                 // de autenticación de Java ('UsernamePasswordAuthenticationFilter'). De esta forma, interceptamos el token,
                 // validamos la firma y poblamos el contexto de seguridad antes de evaluar la petición.
