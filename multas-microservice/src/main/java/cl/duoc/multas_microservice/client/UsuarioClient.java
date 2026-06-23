@@ -21,8 +21,6 @@ public class UsuarioClient {
     @Qualifier("usuariosWebClient") // <-- Vincula con el WebClient del puerto 8081
     private WebClient webClient;
 
-    // Eliminamos la variable local @Value que estaba de adorno
-    // Eliminamos el String token de la firma del método
     public UsuarioResponse obtenerUsuarioPorId(Long id){
         log.info("Obteniendo información del usuario con ID: {}", id);
         try{
