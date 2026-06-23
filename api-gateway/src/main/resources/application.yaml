@@ -1,3 +1,39 @@
 spring:
   application:
     name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: autores-microservice
+              uri: ${AUTORES_SERVICE_URL:http://localhost:8084} # <-- Propiedad de entorno con respaldo local
+              predicates:
+                - Path=/api/autores/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True # <-- Filtro basico para la rúbrica
+
+            - id: libros-microservice
+              uri: ${LIBROS_SERVICE_URL:http://localhost:8085}
+              predicates:
+                - Path=/api/libros/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+            - id: categorias-microservice
+              uri: ${CATEGORIAS_SERVICE_URL:http://localhost:8086}
+              predicates:
+                - Path=/api/categorias/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+            - id: prestamos-microservice
+              uri: ${PRESTAMOS_SERVICE_URL:http://localhost:8089}
+              predicates:
+                - Path=/api/prestamos/**
+              filters:
+                - AddResponseHeader=X-Gateway-Processed, True
+
+server:
+  port: 8080
