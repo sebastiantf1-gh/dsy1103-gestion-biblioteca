@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: multas-microservice
+
+  #Configuracion de Base de Datos
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_multas
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Configuracion de Migraciones con Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # Configuracion de Hibernate / JPA
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+
+# Configuracion del Servidor (puerto 8087)
+server:
+  port: 8087
+  servlet:
+    context-path: /api
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Configuracion de Logs
+logging:
+  level:
+    org:
+      springframework: INFO
+    cl:
+      duoc:
+        multas_microservice: DEBUG
+  file:
+    name: logs/multas-microservice.log
+
+# Configuracion clave secreta de Seguridad JWT
+jwt:
+  secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
+
+# URLs
+services:
+  usuarios:
+    baseUrl: http://localhost:8081/api/usuarios
+  prestamos:
+    baseUrl: http://localhost:8089/api/prestamos
