@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
-    // Leemos las propiedades exactas de tu application.properties
+
     @Value("${services.usuarios.baseUrl}")
     private String usuariosBaseUrl;
 

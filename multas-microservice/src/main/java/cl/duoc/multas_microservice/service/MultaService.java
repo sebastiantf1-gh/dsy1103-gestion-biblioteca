@@ -32,7 +32,7 @@ public class MultaService {
     @Autowired
     private PrestamoClient prestamoClient;
 
-    public MultaResponse crearMulta(MultaRequest multaRequest, String token) {
+    public MultaResponse crearMulta(MultaRequest multaRequest) {
         log.info("Creando nueva multa para el Usuario ID: {} asociado al Préstamo ID: {}",
                 multaRequest.getIdUsuario(), multaRequest.getIdPrestamo());
         //Validar existencia del usuario en el microservicio de usuarios

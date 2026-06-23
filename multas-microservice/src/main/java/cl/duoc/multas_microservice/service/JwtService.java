@@ -11,7 +11,7 @@ import java.security.Key;
 
 @Service
 public class JwtService {
-    // Extrae la clave secreta desde el archivo application.properties
+    // Extrae la clave secreta desde el archivo application.yaml
     @Value("${jwt.secret}")
     private String secretKey;
 

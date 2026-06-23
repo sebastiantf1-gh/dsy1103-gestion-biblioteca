@@ -46,11 +46,9 @@ public class MultaServiceTest {
     private Multa multa;
     private MultaResponse multaResponse;
     private MultaRequest multaRequest;
-    private String token;
 
     @BeforeEach
     void setUp() {
-        token = "Bearer token-secreto-123";
 
         multa = Multa.builder()
                 .id(1L)
@@ -89,7 +87,7 @@ public class MultaServiceTest {
         when(multaMapper.toResponse(multa)).thenReturn(multaResponse);
 
         //When
-        MultaResponse resultado = multaService.crearMulta(multaRequest, token);
+        MultaResponse resultado = multaService.crearMulta(multaRequest);
 
         //Then
         assertNotNull(resultado);
