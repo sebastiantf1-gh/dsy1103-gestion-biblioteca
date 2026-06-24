@@ -2,27 +2,27 @@ spring:
   application:
     name: reservas-microservice
 
-  # Configuración de Base de Datos
+  # Configuracion de Base de Datos
   datasource:
-    url: jdbc:mysql://localhost:3306/db_reservas
-    username: root
-    password:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:db_reservas}?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USER:root}
+    password: ${DB_PASS:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  # Configuración de Migraciones con Flyway
+  # Configuracion de Migraciones con Flyway
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-  # Configuración de Hibernate / JPA
+  # Configuracion de Hibernate / JPA
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
     open-in-view: false
 
-# Configuración del Servidor
+# Configuracion del Servidor
 server:
   port: 8090
   servlet:
@@ -35,24 +35,20 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-# Configuración de Logs
+# Configuracion de Logs
 logging:
   level:
-    org:
-      springframework: INFO
-    cl:
-      duoc:
-        reservas_microservice: DEBUG
-  file:
-    name: logs/reservas-microservice.log
+    org.springframework: INFO
+    cl.duoc.reservas_microservice: DEBUG
 
-# Configuracion Seguridad JWT (Clave compartida con Autenticación)
+# Configuracion Seguridad JWT (Clave compartida con Autenticacion)
 jwt:
   secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
 
-# Configuración de Clientes Remotos (Exclusivo de Reservas para WebClient)
+# Configuraciï¿½n de Clientes Remotos (Exclusivo de Reservas para WebClient)
 services:
   usuarios:
-    baseUrl: http://localhost:8081/api/usuarios
+    # Si corre en Docker usa el nombre de red del contenedor 'usuarios-microservice', sino 'localhost'
+    baseUrl: ${USUARIOS_SERVICE_API_URL:http://localhost:8081/api/usuarios}
   libros:
-    baseUrl: http://localhost:8085/api/libros
+    baseUrl: ${LIBROS_SERVICE_API_URL:http://localhost:8085/api/libros}
