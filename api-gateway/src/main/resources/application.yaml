@@ -71,7 +71,7 @@ spring:
                 - AddResponseHeader=X-Gateway-Processed, True
 
             - id: reservas-microservice
-              uri: ${RESERVAS_SERVICE_URL:http://localhost:8089}
+              uri: ${RESERVAS_SERVICE_URL:http://localhost:8090}
               predicates:
                 - Path=/api/v1/reservas/**
               filters:

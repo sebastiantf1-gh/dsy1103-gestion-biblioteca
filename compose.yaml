@@ -174,6 +174,77 @@ services:
     networks:
       - biblioteca-net
 
+  reservas-microservice:
+    build:
+      context: ./reservas-microservice
+      dockerfile: Dockerfile
+    container_name: reservas-microservice
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_reservas
+      DB_USER: root
+      DB_PASS: root
+      USUARIOS_SERVICE_API_URL: http://usuarios-microservice:8081/api/usuarios
+      LIBROS_SERVICE_API_URL: http://libros-microservice:8085/api/libros
+    depends_on:
+      mysql:
+        condition: service_healthy
+      usuarios-microservice:
+        condition: service_started
+      libros-microservice:
+        condition: service_started
+    networks:
+      - biblioteca-net
+  autenticacion-microservice:
+    build:
+      context: ./autenticacion-microservice
+      dockerfile: Dockerfile
+    container_name: autenticacion-microservice
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_autenticacion
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  multas-microservice:
+    build:
+      context: ./multas-microservice
+      dockerfile: Dockerfile
+    container_name: multas-microservice
+    restart: unless-stopped
+    ports:
+      - "8087:8087"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_multas
+      DB_USER: root
+      DB_PASS: root
+      PRESTAMOS_SERVICE_URL: http://prestamos-microservice:8089/api
+      USUARIOS_SERVICE_URL: http://usuarios-microservice:8081/api
+    depends_on:
+      mysql:
+        condition: service_healthy
+      prestamos-microservice:
+        condition: service_started
+      usuarios-microservice:
+        condition: service_started
+    networks:
+      - biblioteca-net
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -188,6 +259,9 @@ services:
       LIBROS_SERVICE_URL: http://libros-microservice:8085
       CATEGORIAS_SERVICE_URL: http://categorias-microservice:8086
       PRESTAMOS_SERVICE_URL: http://prestamos-microservice:8089
+      RESERVAS_SERVICE_URL: http://reservas-microservice:8090
+      MULTAS_SERVICE_URL: http://multas-microservice:8087
+      AUTENTICACION_SERVICE_URL: http://autenticacion-microservice:8088
     depends_on:
       autores-microservice:
         condition: service_started
@@ -197,6 +271,13 @@ services:
         condition: service_started
       prestamos-microservice:
         condition: service_started
+      multas-microservice:
+        condition: service_started
+      autenticacion-microservice:
+        condition: service_started
+      reservas-microservice:
+        condition: service_started
+
     networks:
       - biblioteca-net
 
