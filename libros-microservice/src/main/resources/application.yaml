@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: libros-microservice
+  profiles:
+    active: dev
+
+  # Database configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_libros
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Flyway configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+
+# Server configuration
+server:
+  port: 8085
+  servlet:
+    context-path: /api
+
+# Logging configuration
+logging:
+  level:
+    org.springframework: INFO
+    cl.duoc.dsy1103.libros_microservice: DEBUG
+  file:
+    name: logs/libros-microservice.log
+
+# Web client configuration
+services:
+  autores:
+    url: http://localhost:8084/api
+  categorias:
+    url: http://localhost:8086/api
+  generos:
+    url: http://localhost:8083/api
+
+# JWT configuration
+jwt:
+  secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
+
+# Swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
