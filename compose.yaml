@@ -19,6 +19,101 @@ services:
     networks:
       - biblioteca-net
 
+  autores-microservice:
+    build:
+      context: ./autores-microservice
+      dockerfile: Dockerfile
+    container_name: autores-microservice
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_autores
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  libros-microservice:
+    build:
+      context: ./libros-microservice
+      dockerfile: Dockerfile
+    container_name: libros-microservice
+    restart: unless-stopped
+    ports:
+      - "8085:8085"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_libros
+      DB_USER: root
+      DB_PASS: root
+      AUTORES_SERVICE_URL: http://autores-microservice:8084/api
+      CATEGORIAS_SERVICE_URL: http://categorias-microservice:8086/api
+      GENEROS_SERVICE_URL: http://generos-microservice:8083/api
+    depends_on:
+      mysql:
+        condition: service_healthy
+      autores-microservice:
+        condition: service_started
+      categorias-microservice:
+        condition: service_started
+      generos-microservice:
+        condition: service_started
+    networks:
+      - biblioteca-net
+
+  categorias-microservice:
+    build:
+      context: ./categorias-microservice
+      dockerfile: Dockerfile
+    container_name: categorias-microservice
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_categorias
+      DB_USER: root
+      DB_PASS: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  prestamos-microservice:
+    build:
+      context: ./prestamos-microservice
+      dockerfile: Dockerfile
+    container_name: prestamos-microservice
+    restart: unless-stopped
+    ports:
+      - "8089:8089"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_prestamos
+      DB_USER: root
+      DB_PASS: root
+      USUARIOS_SERVICE_URL: http://usuarios-microservice:8081/api
+      LIBROS_SERVICE_URL: http://libros-microservice:8085/api
+    depends_on:
+      mysql:
+        condition: service_healthy
+      usuarios-microservice:
+        condition: service_started
+      libros-microservice:
+        condition: service_started
+    networks:
+      - biblioteca-net
+
   usuarios-microservice:
     build:
       context: ./usuarios-microservice
@@ -76,6 +171,32 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    networks:
+      - biblioteca-net
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Inyectamos los nombres de los contenedores como dominios de red para el Gateway
+      AUTORES_SERVICE_URL: http://autores-microservice:8084
+      LIBROS_SERVICE_URL: http://libros-microservice:8085
+      CATEGORIAS_SERVICE_URL: http://categorias-microservice:8086
+      PRESTAMOS_SERVICE_URL: http://prestamos-microservice:8089
+    depends_on:
+      autores-microservice:
+        condition: service_started
+      libros-microservice:
+        condition: service_started
+      categorias-microservice:
+        condition: service_started
+      prestamos-microservice:
+        condition: service_started
     networks:
       - biblioteca-net
 
