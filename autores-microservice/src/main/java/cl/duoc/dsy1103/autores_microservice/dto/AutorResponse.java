@@ -8,24 +8,29 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Entidad que maneja la estructura de la informacion que se proyecta al Cliente.")
+@Schema(name = "AutorResponse", description = "Modelo DTO que representa la información técnica, biográfica y de auditoría completa de salida de un autor literario")
 public class AutorResponse {
-    @Schema(description = "ID del autor", example = "5")
+
+    @Schema(description = "Identificador único auto-incremental del autor en la base de datos", example = "5")
     private Long id;
-    @Schema(description = "Nombre completo del autor", example = "George R.R. Martin")
+
+    @Schema(description = "Nombre y apellido completo del autor literario", example = "George R.R. Martin")
     private String nombreCompleto;
-    @Schema(description = "Breve biografia del autor", example = "Escritor de la épica saga Canción de Hielo y Fuego." )
+
+    @Schema(description = "Resumen biográfico oficial, trayectoria o hitos destacados de la carrera del autor", example = "Escritor y guionista estadounidense de literatura fantástica, ciencia ficción y terror, mundialmente conocido por ser el autor de la épica saga Canción de Hielo y Fuego.")
     private String biografia;
-    @Schema(description = "Nacionalidad del autor", example = "Estadounidense")
+
+    @Schema(description = "Nacionalidad o país de origen del autor", example = "Estadounidense")
     private String nacionalidad;
-    @Schema(description = "Fecha de nacimiento del autor", example = "1948-09-20")
+
+    @Schema(description = "Fecha de nacimiento cronológica del autor", example = "1948-09-20")
     private LocalDate fechaNacimiento;
-    @Schema(description = "Fecha de registro del autor en el sistema", example = "2026-05-16 01:17:44")
+
+    @Schema(description = "Fecha y hora exacta en la que se incorporó y persistió el registro del autor en el sistema", example = "2026-05-16T01:17:44")
     private LocalDateTime fechaRegistro;
 }
