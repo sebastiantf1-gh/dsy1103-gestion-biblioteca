@@ -182,22 +182,24 @@ public class LibroService {
         return libroMapper.toResponse(libroActualizado, autor, categoria, genero);
     }
 
-    //Aplica la regla de negocio para procesar el retorno físico de un libro arrendado al inventario de la biblioteca.
-    //marcar libro como disponible - true
+    // Aplica la regla de negocio para procesar el retorno físico de un libro arrendado al inventario de la biblioteca.
+    // marcar libro como disponible - true
     public LibroResponse devolverLibro(Long id){
-        log.info("Devolviendo libro con ID: {}",id);
+        log.info("Devolviendo libro con ID: {}", id);
         Libro libro = libroRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("No se encontro libro con ID: "+ id));
-        if (!libro.getDisponible()){
-            throw new IllegalStateException("Libro con ID: "+ id + " no esta prestado en este momento.");
+                .orElseThrow(() -> new NoSuchElementException("No se encontro libro con ID: " + id));
+
+        //si el libro YA está disponible (true), no se puede procesar una devolución
+        if (libro.getDisponible()){
+            throw new IllegalStateException("Libro con ID: " + id + " no esta prestado en este momento.");
         }
-        libro.setDisponible(true);
+
+        libro.setDisponible(true); // Se marca como disponible de nuevo
         Libro libroActualizado = libroRepository.save(libro);
         AutorResponse autor = autorClient.buscarAutorPorId(libroActualizado.getIdAutor());
         CategoriaResponse categoria = categoriaClient.buscarCategoriaPorId(libroActualizado.getIdCategoria());
         GeneroResponse genero = generoClient.buscarGeneroPorId(libroActualizado.getIdGenero());
         return libroMapper.toResponse(libroActualizado, autor, categoria, genero);
-
     }
 
 }
