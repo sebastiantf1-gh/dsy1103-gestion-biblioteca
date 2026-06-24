@@ -1,410 +1,240 @@
-### Arquitectura de Microservicios — DSY1103 Desarrollo FullStack
+# 📚 Sistema de Gestión de Biblioteca — DSY1103
+
+Sistema de gestión de biblioteca desarrollado con arquitectura de **microservicios** en **Spring Boot**, comunicación entre servicios vía **WebClient**, seguridad basada en **JWT**, migraciones de base de datos con **Flyway** y orquestación completa mediante **Docker Compose**.
 
 ---
 
-## Integrantes del Equipo
+## 🏗️ Arquitectura
 
-| Nombre | Microservicios a cargo |
-|--------|----------------------|
-| Benjamín Vásquez | usuarios, reseñas, géneros |
-| Sebastian Toro | libros, autores, categorías, prestamos |
-| Camilo Vera | reservas, multas, autenticación |
-
----
-
-## Descripción del Proyecto
-
-Sistema de gestión de biblioteca desarrollado bajo arquitectura de microservicios independientes. Cada microservicio gestiona un dominio específico del negocio, con su propia base de datos, endpoints REST y lógica de negocio. Los microservicios se comunican entre sí a través de WebClient para operaciones que requieren datos de otros dominios.
-
----
-
-## Arquitectura General
+El sistema está compuesto por un **API Gateway** central que enruta todas las peticiones entrantes hacia los microservicios correspondientes, cada uno con su propia base de datos en MySQL.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Sistema de Gestion de Biblioteca        │
-├──────────────────────────┬──────────────────────────────────┤
-│   autenticacion :8088    │   usuarios :8081                 │
-│   generos       :8083    │   libros   :8085                 │
-│   autores       :8084    │   categorias :8086               │
-│   resennas      :8082    │   prestamos :8089                │
-│   multas        :8087    │   reservas  : 8090               │
-└──────────────────────────┴──────────────────────────────────┘
-```
-
-### Comunicación entre microservicios
-
-```
-resennas-microservice
-    → llama a usuarios-microservice  (verificar que el usuario existe)
-    → llama a libros-microservice    (verificar que el libro existe)
-
-prestamos-microservice
-    → llama a usuarios-microservice  (verificar que el usuario existe)
-    → llama a libros-microservice    (verificar disponibilidad del libro)
-
-multas-microservice
-    → llama a usuarios-microservice  (verificar que el usuario existe)
-    → llama a prestamos-microservice (verificar que el préstamo existe)
-
-reservas-microservice
-     → llama a usuarios-microservice  (verificar que el usuario existe)
-     → llama a libros-microservice    (verificar disponibilidad del libro)
-
----
-
-## Microservicios
-
-### 1. usuarios-microservice — Puerto 8081
-Gestiona los usuarios registrados en la biblioteca.
-
-**Base de datos:** `db_usuarios`
-
-**Endpoints:**
-```
-GET    /api/usuarios          → listar todos los usuarios
-GET    /api/usuarios/{id}     → buscar usuario por id
-POST   /api/usuarios          → crear nuevo usuario
-PUT    /api/usuarios/{id}     → modificar usuario
-DELETE /api/usuarios/{id}     → eliminar usuario
+Cliente
+   │
+   ▼
+API Gateway (:8080)
+   ├── /api/autores/**          → autores-microservice       (:8084)
+   ├── /api/libros/**           → libros-microservice        (:8085)
+   ├── /api/categorias/**       → categorias-microservice    (:8086)
+   ├── /api/generos/**          → generos-microservice       (:8083)
+   ├── /api/usuarios/**         → usuarios-microservice      (:8081)
+   ├── /api/resennas/**         → resennas-microservice      (:8082)
+   ├── /api/prestamos/**        → prestamos-microservice     (:8089)
+   ├── /api/v1/reservas/**      → reservas-microservice      (:8090)
+   ├── /api/v1/multas/**        → multas-microservice        (:8087)
+   └── /api/v1/auth/**          → autenticacion-microservice (:8088)
 ```
 
 ---
 
-### 2. resennas-microservice — Puerto 8082
-Gestiona las reseñas de libros realizadas por los usuarios. Un usuario solo puede reseñar el mismo libro una vez.
+## 🧩 Microservicios
 
-**Base de datos:** `db_resennas`
-
-**Endpoints:**
-```
-GET    /api/resennas          → listar todas las reseñas
-GET    /api/resennas/{id}     → buscar reseña por id
-POST   /api/resennas          → crear nueva reseña
-PUT    /api/resennas/{id}     → modificar reseña
-DELETE /api/resennas/{id}     → eliminar reseña
-```
-
-**Reglas de negocio:**
-- Un usuario no puede reseñar el mismo libro dos veces
-- La calificación debe ser entre 1 y 5
-- La fecha de registro la asigna el sistema automáticamente
+| Microservicio              | Puerto | Descripción                                                               |
+|----------------------------|--------|---------------------------------------------------------------------------|
+| `api-gateway`              | 8080   | Enrutador central (Spring Cloud Gateway)                                  |
+| `autenticacion-microservice` | 8088 | Emisión de tokens JWT, login y registro de personal                      |
+| `usuarios-microservice`    | 8081   | CRUD de usuarios de la biblioteca (lectores)                              |
+| `autores-microservice`     | 8084   | CRUD de autores literarios                                                |
+| `libros-microservice`      | 8085   | Catálogo de libros; consume autores, categorías y géneros vía WebClient  |
+| `categorias-microservice`  | 8086   | CRUD de categorías de libros                                              |
+| `generos-microservice`     | 8083   | CRUD de géneros literarios                                                |
+| `prestamos-microservice`   | 8089   | Gestión de préstamos; consume usuarios y libros vía WebClient             |
+| `reservas-microservice`    | 8090   | Gestión de reservas; consume usuarios y libros vía WebClient              |
+| `resennas-microservice`    | 8082   | Reseñas de libros por usuario; consume usuarios y libros vía WebClient   |
+| `multas-microservice`      | 8087   | Gestión de multas; consume préstamos y usuarios vía WebClient             |
 
 ---
 
-### 3. generos-microservice — Puerto 8083
-Gestiona los géneros literarios disponibles en la biblioteca.
+## 🛠️ Stack Tecnológico
 
-**Base de datos:** `db_generos`
-
-**Endpoints:**
-```
-GET    /api/generos           → listar todos los géneros
-GET    /api/generos/{id}      → buscar género por id
-POST   /api/generos           → agregar nuevo género
-PUT    /api/generos/{id}      → modificar género
-DELETE /api/generos/{id}      → eliminar género
-```
-
----
-
-### 4. autores-microservice — Puerto 8084
-Gestiona los autores de los libros del catálogo.
-
-**Base de datos:** `db_autores`
-
-**Endpoints:**
-```
-GET    /api/autores           → listar todos los autores
-GET    /api/autores/{id}      → buscar autor por id
-POST   /api/autores           → crear nuevo autor
-PUT    /api/autores/{id}      → modificar autor
-DELETE /api/autores/{id}      → eliminar autor
-```
+- **Java 17**
+- **Spring Boot 4.0.6**
+    - Spring Web MVC
+    - Spring Data JPA
+    - Spring Security
+    - Spring WebClient
+    - Spring Cloud Gateway
+    - Spring Actuator
+    - Spring Validation
+- **JWT** — `jjwt` 0.13.0
+- **MySQL 8.4**
+- **Flyway** — migraciones de base de datos
+- **Lombok**
+- **Springdoc OpenAPI / Swagger UI** — documentación automática
+- **Docker & Docker Compose**
 
 ---
 
-### 5. libros-microservice — Puerto 8085
-Gestiona el catálogo completo de libros de la biblioteca.
+## ✅ Requisitos Previos
 
-**Base de datos:** `db_libros`
-
-**Endpoints:**
-```
-GET    /api/libros                        → listar todos los libros
-GET    /api/libros/{id}                   → buscar libro por id
-GET    /api/libros/autor/{idAutor}        → buscar libros por autor
-GET    /api/libros/categoria/{idCategoria}→ buscar libros por categoría
-GET    /api/libros/genero/{idGenero}      → buscar libros por género
-POST   /api/libros                        → crear nuevo libro
-PUT    /api/libros/{id}                   → modificar libro
-DELETE /api/libros/{id}                   → eliminar libro
-```
+- [Docker](https://www.docker.com/) y Docker Compose instalados
+- Puerto **8080** disponible (y opcionalmente los puertos 8081–8090 para acceso directo)
 
 ---
 
-### 6. categorias-microservice — Puerto 8086
-Gestiona las categorías de los libros del catálogo.
+## 🚀 Levantar el proyecto
 
-**Base de datos:** `db_categorias`
-
-**Endpoints:**
-```
-GET    /api/categorias        → listar todas las categorías
-GET    /api/categorias/{id}   → buscar categoría por id
-POST   /api/categorias        → crear nueva categoría
-PUT    /api/categorias/{id}   → modificar categoría
-DELETE /api/categorias/{id}   → eliminar categoría
-```
-
----
-
-### 7. multas-microservice — Puerto 8087
-Gestiona las multas generadas por préstamos vencidos.
-
-**Base de datos:** `db_multas`
-
-**Endpoints:**
-```
-GET    /api/multas            → listar todas las multas
-GET    /api/multas/{id}       → buscar multa por id
-POST   /api/multas            → crear nueva multa
-PUT    /api/multas/{id}       → modificar multa
-DELETE /api/multas/{id}       → eliminar multa
-```
-
----
-
-### 8. autenticacion-microservice — Puerto 8088
-Gestiona la autenticación y autorización de los usuarios del sistema mediante JWT.
-
-**Base de datos:** `db_autenticacion`
-
-**Endpoints:**
-```
-POST   /api/auth/login        → iniciar sesión, devuelve token JWT
-POST   /api/auth/register     → registrar nuevo usuario del sistema
-```
-
----
-
-### 9. prestamos-microservice — Puerto 8089
-Gestiona los préstamos de libros realizados por los usuarios.
-
-**Base de datos:** `db_prestamos`
-
-**Endpoints:**
-```
-GET    /api/prestamos                     → listar todos los préstamos
-GET    /api/prestamos/{id}                → buscar préstamo por id
-GET    /api/prestamos/usuario/{idUsuario} → préstamos de un usuario
-GET    /api/prestamos/libro/{idLibro}     → préstamos de un libro
-GET    /api/prestamos/estado/{estado}     → préstamos por estado
-POST   /api/prestamos                     → crear nuevo préstamo
-```
-
----
-
-### 10. reservas-microservice — Puerto 8090
-Gestiona las reservas de libros realizadas por los usuarios. Permite reservar un libro y consultar el historial de reservas.
-**Base de datos:** `db_reservas`
-
-**Endpoints:**
-```
-GET    /api/v1/reservas                        → listar todas las reservas
-GET    /api/v1/reservas/usuario/{idUsuario}    → reservas de un usuario
-POST   /api/v1/reservas                        → crear nueva reserva
-DELETE /api/v1/reservas/{id}                   → eliminar reserva por id
-DELETE /api/v1/reservas/usuario/{idUsuario}    → eliminar todas las reservas de un usuario
-
-```
-**Reglas de negocio:**
-- Verifica que el usuario existe antes de crear la reserva
-- Verifica que el libro existe antes de crear la reserva
-## Tecnologías Utilizadas
-
-```
-Java 17
-Spring Boot 3.4.5
-Spring Data JPA + Hibernate
-Spring Security
-Spring WebFlux (WebClient)
-MySQL 8
-Flyway
-Lombok
-Maven
-```
-
----
-
-## Bases de Datos
-
-Cada microservicio tiene su propia base de datos independiente:
-
-```
-db_usuarios
-db_resennas
-db_generos
-db_autores
-db_libros
-db_categorias
-db_multas
-db_autenticacion
-db_prestamos
-db_reservas
-```
-
----
-
-## Requisitos Previos
-
-Antes de ejecutar el proyecto necesitas tener instalado:
-
-```
-Java 17 o superior
-Maven 3.8 o superior
-MySQL 8 corriendo en localhost:3306
-IntelliJ IDEA (recomendado)
-Postman (para probar los endpoints)
-```
-
----
-
-## Pasos para Ejecutar
-
-### 1. Clonar el repositorio
+Desde la raíz del repositorio, ejecutar:
 
 ```bash
-git clone https://github.com/[usuario]/dsy1103-gestion-biblioteca.git
-cd dsy1103-gestion-biblioteca
+docker compose up --build
 ```
 
-### 2. Crear las bases de datos en MySQL
+Docker Compose:
+1. Levanta una instancia de **MySQL 8.4** y ejecuta `init-db.sql` para crear las 10 bases de datos.
+2. Construye y lanza cada microservicio una vez que MySQL está saludable.
+3. Levanta el **API Gateway** una vez que todos los servicios estén en pie.
 
-```sql
-CREATE DATABASE IF NOT EXISTS db_usuarios;
-CREATE DATABASE IF NOT EXISTS db_resennas;
-CREATE DATABASE IF NOT EXISTS db_generos;
-CREATE DATABASE IF NOT EXISTS db_autores;
-CREATE DATABASE IF NOT EXISTS db_libros;
-CREATE DATABASE IF NOT EXISTS db_categorias;
-CREATE DATABASE IF NOT EXISTS db_multas;
-CREATE DATABASE IF NOT EXISTS db_autenticacion;
-CREATE DATABASE IF NOT EXISTS db_prestamos;
-CREATE DATABASE IF NOT EXISTS db_reservas;
+Para detener y eliminar los contenedores:
 
+```bash
+docker compose down
 ```
 
-### 3. Configurar credenciales de MySQL
+Para eliminar también los volúmenes de datos:
 
-En cada microservicio abre el archivo `src/main/resources/application.properties` y ajusta:
-
-```properties
-spring.datasource.username=root
-spring.datasource.password=tu_contraseña
-```
-
-### 4. Ejecutar los microservicios
-
-Se recomienda ejecutar en este orden para respetar las dependencias:
-
-```
-1. usuarios-microservice      (puerto 8081)
-2. generos-microservice       (puerto 8083)
-3. autores-microservice       (puerto 8084)
-4. libros-microservice        (puerto 8085)
-5. categorias-microservice    (puerto 8086)
-6. autenticacion-microservice (puerto 8088)
-7. resennas-microservice      (puerto 8082)
-8. prestamos-microservice     (puerto 8089)
-9. multas-microservice        (puerto 8087)
-10. reservas-microservice     (puerto 8090)
-```
-
-En IntelliJ: abrir cada proyecto → botón Run o `Shift+F10`.
-
-Flyway ejecutará automáticamente las migraciones SQL al arrancar cada microservicio.
-
-### 5. Verificar que funcionan
-
-```
-GET http://localhost:8081/api/usuarios     → debe devolver lista de usuarios
-GET http://localhost:8083/api/generos      → debe devolver lista de géneros
-GET http://localhost:8085/api/libros       → debe devolver lista de libros
+```bash
+docker compose down -v
 ```
 
 ---
 
-## Ejemplo de Uso con Postman
+## 🔐 Autenticación
 
-### Crear una reseña
+Todos los endpoints (excepto login y registro) requieren un **token JWT Bearer**.
 
-```
-POST http://localhost:8082/api/resennas
+### Obtener token
+
+```http
+POST http://localhost:8080/api/v1/auth
 Content-Type: application/json
 
 {
-    "calificacion": 5,
-    "descripcion": "Excelente libro, muy recomendado",
-    "idUsuario": 1,
-    "idLibro": 1
+  "nombreUsuario": "admin",
+  "password": "admin123"
 }
 ```
 
-### Crear un usuario
+### Registrar nuevo usuario de personal
 
-```
-POST http://localhost:8081/api/usuarios
+```http
+POST http://localhost:8080/api/v1/auth/register
 Content-Type: application/json
 
 {
-    "nombreCompleto": "Juan Pérez",
-    "email": "juan@email.com",
-    "telefono": "+56912345678"
+  "nombreUsuario": "nuevo_usuario",
+  "email": "usuario@biblioteca.cl",
+  "password": "contraseña_segura"
 }
 ```
 
-### Crear un préstamo
+Una vez obtenido el token, incluirlo en todas las peticiones:
 
 ```
-POST http://localhost:8089/api/prestamos
-Content-Type: application/json
-
-{
-    "idUsuario": 1,
-    "idLibro": 1,
-    "fechaDevolucion": "2026-06-01T10:00:00"
-}
+Authorization: Bearer <token>
 ```
 
 ---
 
-## Estructura de cada Microservicio
+## 📖 Documentación de la API (Swagger UI)
+
+Cada microservicio expone su propia documentación interactiva. Acceder directamente al servicio (sin pasar por el gateway):
+
+| Microservicio          | Swagger UI                                      |
+|------------------------|-------------------------------------------------|
+| Autores                | http://localhost:8084/swagger-ui.html           |
+| Libros                 | http://localhost:8085/swagger-ui.html           |
+| Categorías             | http://localhost:8086/swagger-ui.html           |
+| Prestamos              | http://localhost:8089/swagger-ui.html           |
+| Multas                 | http://localhost:8087/swagger-ui.html           |
+| Autenticación          | http://localhost:8088/swagger-ui.html           |
+
+---
+
+## 🗄️ Base de Datos
+
+El archivo `init-db.sql` crea automáticamente las siguientes bases de datos en MySQL al primer inicio:
+
+| Base de datos       | Microservicio asociado       |
+|---------------------|------------------------------|
+| `db_autores`        | autores-microservice         |
+| `db_libros`         | libros-microservice          |
+| `db_categorias`     | categorias-microservice      |
+| `db_generos`        | generos-microservice         |
+| `db_usuarios`       | usuarios-microservice        |
+| `db_prestamos`      | prestamos-microservice       |
+| `db_resennas`       | resennas-microservice        |
+| `db_reservas`       | reservas-microservice        |
+| `db_autenticacion`  | autenticacion-microservice   |
+| `db_multas`         | multas-microservice          |
+
+Las migraciones de esquema e datos iniciales de cada base son gestionadas por **Flyway** al arrancar cada microservicio.
+
+---
+
+## 📂 Estructura del Repositorio
 
 ```
-microservicio/
-├── src/main/java/cl/duoc/dsy1103/
-│   └── [nombre]_microservice/
-│       ├── client/          → comunicación con otros microservicios
-│       ├── config/          → SecurityConfig, WebClientConfig
-│       ├── controller/      → endpoints REST
-│       ├── dto/             → Request, Response, UpdateRequest
-│       ├── exception/       → excepciones personalizadas y GlobalHandlerException
-│       ├── mapper/          → conversión entre entidad y dto
-│       ├── model/           → entidad JPA
-│       ├── repository/      → interface JpaRepository
-│       └── service/         → lógica de negocio
-└── src/main/resources/
-    ├── application.properties
-    └── db/migration/
-        ├── V1__create_table.sql
-        └── V2__initial_data.sql
+dsy1103-gestion-biblioteca/
+├── compose.yaml
+├── init-db.sql
+├── api-gateway/
+├── autenticacion-microservice/
+├── usuarios-microservice/
+├── autores-microservice/
+├── libros-microservice/
+├── categorias-microservice/
+├── generos-microservice/
+├── prestamos-microservice/
+├── reservas-microservice/
+├── resennas-microservice/
+└── multas-microservice/
+```
+
+Cada microservicio sigue la misma estructura interna:
+
+```
+<microservicio>/
+├── Dockerfile
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/.../
+    │   │   ├── config/       # SecurityConfig, SwaggerConfig, WebClientConfig
+    │   │   ├── controller/   # Controladores REST
+    │   │   ├── dto/          # Request y Response DTOs
+    │   │   ├── exception/    # Excepciones y GlobalExceptionHandler
+    │   │   ├── mapper/       # Mappers entidad ↔ DTO
+    │   │   ├── model/        # Entidades JPA
+    │   │   ├── repository/   # Repositorios Spring Data
+    │   │   ├── security/     # JwtAuthenticationFilter
+    │   │   └── service/      # Lógica de negocio
+    │   └── resources/
+    │       ├── application.yaml
+    │       └── db/migration/ # Scripts Flyway (V1__, V2__, ...)
+    └── test/
+        └── java/.../         # Tests unitarios de servicios
 ```
 
 ---
 
-## Notas Importantes
+## 🔄 Comunicación entre Microservicios
 
-- Flyway gestiona las migraciones automáticamente, no modificar las tablas manualmente
-- Los ids de usuarios y libros en `db_resennas` y `db_prestamos` deben existir en sus respectivas BDs
-- No modificar el repositorio después de la fecha de entrega.
+Los microservicios que necesitan datos de otros los consultan de forma **síncrona** mediante **Spring WebClient**:
+
+- **libros-microservice** → consulta autores, categorías y géneros
+- **prestamos-microservice** → consulta usuarios y libros
+- **reservas-microservice** → consulta usuarios y libros
+- **resennas-microservice** → consulta usuarios y libros
+- **multas-microservice** → consulta préstamos y usuarios
+
+---
+
+## 🧪 Tests
+
+Cada microservicio incluye tests unitarios sobre la capa de servicio. Para ejecutarlos en un microservicio específico:
+
+```bash
+cd <microservicio>
+./mvnw test
+```
