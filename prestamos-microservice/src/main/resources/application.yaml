@@ -41,9 +41,9 @@ logging:
 # Web client configuration
 services:
   usuarios:
-    url: http://localhost:8081/api
+    url: ${USUARIOS_SERVICE_URL:http://localhost:8081/api}
   libros:
-    url: http://localhost:8085/api
+    url: ${LIBROS_SERVICE_URL:http://localhost:8085/api}
 
 # JWT configuration
 jwt:

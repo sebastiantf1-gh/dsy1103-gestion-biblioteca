@@ -41,11 +41,11 @@ logging:
 # Web client configuration
 services:
   autores:
-    url: http://localhost:8084/api
+    url: ${AUTORES_SERVICE_URL:http://localhost:8084/api}
   categorias:
-    url: http://localhost:8086/api
+    url: ${CATEGORIAS_SERVICE_URL:http://localhost:8086/api}
   generos:
-    url: http://localhost:8083/api
+    url: ${GENEROS_SERVICE_URL:http://localhost:8083/api}
 
 # JWT configuration
 jwt:
