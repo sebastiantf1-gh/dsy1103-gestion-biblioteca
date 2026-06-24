@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: reservas-microservice
+
+  # Configuración de Base de Datos
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_reservas
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Configuración de Migraciones con Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # Configuración de Hibernate / JPA
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+
+# Configuración del Servidor
+server:
+  port: 8089
+  servlet:
+    context-path: /api
+
+# Swagger UI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Configuración de Logs
+logging:
+  level:
+    org:
+      springframework: INFO
+    cl:
+      duoc:
+        reservas_microservice: DEBUG
+  file:
+    name: logs/reservas-microservice.log
+
+# Configuracion Seguridad JWT (Clave compartida con Autenticación)
+jwt:
+  secret: a13644aa2a98114a0e84b4c35821263fd546c9e8fbeb73ccfc4dbbc68d530ed35bdd0df7ea742cd2c720ff20532addb20f1dbc092aa0636cae0da83b7ebcbc64
+
+# Configuración de Clientes Remotos (Exclusivo de Reservas para WebClient)
+services:
+  usuarios:
+    baseUrl: http://localhost:8081/api/usuarios
+  libros:
+    baseUrl: http://localhost:8085/api/libros
