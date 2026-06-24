@@ -33,10 +33,10 @@ public class LibroClient {
         } catch (WebClientResponseException ex) {
             log.error("Error en comunicación remota con Libros para ID: {}", id, ex);
             switch (ex.getStatusCode().value()) {
-                case 401 -> throw new UnauthorizedException("No autorizado para acceder al servicio de usuarios. Token inválido.");
-                case 403 -> throw new ForbiddenException("Acceso prohibido al servicio de usuarios. Permisos insuficientes.");
-                case 404 -> throw new NoSuchElementException("Usuario no encontrado con ID: " + id);
-                default -> throw new RuntimeException("Error al conectar con el servicio de Usuarios");
+                case 401 -> throw new UnauthorizedException("No autorizado para acceder al servicio de Libros. Token inválido.");
+                case 403 -> throw new ForbiddenException("Acceso prohibido al servicio de Libros. Permisos insuficientes.");
+                case 404 -> throw new NoSuchElementException("Libro no encontrado con ID: " + id);
+                default -> throw new RuntimeException("Error al conectar con el servicio de Libros");
             }
         }
     }
